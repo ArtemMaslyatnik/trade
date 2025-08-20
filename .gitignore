@@ -1,0 +1,11 @@
+server/.vscode
+server/venv
+server/config/__pycache__
+server/config/__init__.py
+server/api/__init__.py
+server/api/__pycache__
+server/api/migrations/
+server/account/__init__.py
+server/account/__pycache__
+server/account/migrations/
+front/node_modules
