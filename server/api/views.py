@@ -1,3 +1,41 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from api import models
+from api import serializers
 
-# Create your views here.
+
+# Catalogs
+class CompanyViewSet(viewsets.ModelViewSet):
+
+    queryset = models.objects.all()
+    serializer_class = serializers.CompanySerializer
+
+
+class PartnerViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Partner.objects.all()
+    serializer_class = serializers.PartnerSerializer
+
+
+class ContractViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Contract.objects.all()
+    serializer_class = serializers.ContractSerializer
+
+
+class GoodsViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Goods.objects.all()
+    serializer_class = serializers.GoodsSerializer
+
+
+# Documents
+class InvoiceOutViewSet(viewsets.ModelViewSet):
+
+    queryset = models.InvoiceOut.objects.all()
+    serializer_class = serializers.InvoiceOutSerializer
+
+
+class InvoiceInViewSet(viewsets.ModelViewSet):
+
+    queryset = models.InvoiceIn.objects.all()
+    serializer_class = serializers.InvoiceInSerializer
