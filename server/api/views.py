@@ -6,7 +6,7 @@ from api import serializers
 # Catalogs
 class CompanyViewSet(viewsets.ModelViewSet):
 
-    queryset = models.objects.all()
+    queryset = models.Company.objects.all()
     serializer_class = serializers.CompanySerializer
 
 

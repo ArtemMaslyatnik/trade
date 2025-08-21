@@ -30,11 +30,20 @@ class GoodsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class InvoiceOutSerializer(serializers.ModelSerializer):
+class InvoiceOutListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvoiceOut
-        fields = '__all__'
+        fields = ['number', 'goods' 'price', 'quantity']
+
+
+class InvoiceOutSerializer(serializers.ModelSerializer):
+
+    InvoiceOutList =  InvoiceOutListSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = InvoiceOut
+        fields = []
 
 
 class InvoiceInSerializer(serializers.ModelSerializer):
