@@ -43,14 +43,15 @@ class InvoiceOutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.InvoiceOut
-        fields = ['company', 'partner', 'contract', 'invoice_out_list']
+        fields = ['is_active', 'number', 'created_at', 'company',
+                  'partner', 'contract', 'invoice_out_list']
 
 
 class InvoiceInListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.InvoiceInList
-        fields = '__all__'
+        fields = ['number', 'goods', 'price', 'quantity']
 
 
 class InvoiceInSerializer(serializers.ModelSerializer):
@@ -59,4 +60,5 @@ class InvoiceInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.InvoiceIn
-        fields = ['company', 'partner', 'contract', 'invoice_in_list']
+        fields = ['is_active', 'number', 'created_at', 'company', 'partner',
+                  'contract', 'invoice_in_list']

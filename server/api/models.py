@@ -60,11 +60,11 @@ class InvoiceOut(Document):
 
 
 class InvoiceOutList(List):
-    id = models.BigAutoField()
+    id = models.BigAutoField
     invoice_out = models.ForeignKey(InvoiceOut, related_name='invoice_in_list', on_delete=models.CASCADE)
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     price = models.BigIntegerField()
-    quantity = models.BigIntegerField
+    quantity = models.BigIntegerField()
 
 
 class InvoiceIn(Document):
@@ -75,7 +75,7 @@ class InvoiceIn(Document):
 
 
 class InvoiceInList(List):
-    id = models.BigAutoField()
+    id = models.BigAutoField
     invoice_in = models.ForeignKey(InvoiceIn, related_name='invoice_in_list', on_delete=models.CASCADE)
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     price = models.BigIntegerField()
