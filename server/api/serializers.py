@@ -1,53 +1,62 @@
 from rest_framework import serializers
-from api.models import Company, Contract, Goods, InvoiceIn, InvoiceOut, Partner
+from api import models
 
 
 class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Company
+        model = models.Company
         fields = '__all__'
 
 
 class PartnerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Partner
+        model = models.Partner
         fields = '__all__'
 
 
 class ContractSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Contract
+        model = models.Contract
         fields = '__all__'
 
 
 class GoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Goods
+        model = models.Goods
         fields = '__all__'
 
 
 class InvoiceOutListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = InvoiceOut
-        fields = ['number', 'goods' 'price', 'quantity']
+        model = models.InvoiceOutList
+        fields = ['number', 'goods', 'price', 'quantity']
 
 
 class InvoiceOutSerializer(serializers.ModelSerializer):
 
-    InvoiceOutList =  InvoiceOutListSerializer(many=True, read_only=True)
+    invoice_out_list = InvoiceOutListSerializer(many=True, read_only=True)
 
     class Meta:
-        model = InvoiceOut
-        fields = []
+        model = models.InvoiceOut
+        fields = ['company', 'partner', 'contract', 'invoice_out_list']
+
+
+class InvoiceInListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.InvoiceInList
+        fields = '__all__'
 
 
 class InvoiceInSerializer(serializers.ModelSerializer):
 
+    invoice_in_list = InvoiceInListSerializer(many=True, read_only=True)
+
     class Meta:
-        model = InvoiceIn
-        fields = '__all__'
+        model = models.InvoiceIn
+        fields = ['company', 'partner', 'contract', 'invoice_in_list']
