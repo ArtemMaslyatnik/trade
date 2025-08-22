@@ -8,4 +8,4 @@ server/api/migrations/
 server/account/__init__.py
 server/account/__pycache__
 server/account/migrations/
-front/node_modules
+client/node_modules

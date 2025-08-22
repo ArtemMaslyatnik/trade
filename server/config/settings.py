@@ -26,12 +26,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+
     'api',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,3 +122,38 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+# CSRF
+# Поскольку Django и React - разные источники, ставим Lax
+CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SAMESITE = 'Strict'
+
+# Чтобы cookie не были доступны из JS, нужен атрибут HttpOnly
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+
+# Домены, которым мы доверяем
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+
+# Когда приложение заимеет production окружение и https соединение
+#CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+
+# Время жизни сессии в секундах. По умолчанию 2 недели = 1209600
+#SESSION_COOKIE_AGE = 120 <- для примера 120 секунд
+
+# Чтобы убивать сессию при закрытии браузера
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# CORS
+# Разрешаем межсайтовые запросы для домена, на котором находится React приложение
+CORS_ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+]
+
+# Разрешаем заголовки для межсайтовых запросов
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+# Разрешаем отправлять cookie при межсайтовых запросах на разрешённые домены:
+CORS_ALLOW_CREDENTIALS = True
