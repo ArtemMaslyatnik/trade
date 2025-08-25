@@ -3,16 +3,17 @@ import {makeAutoObservable} from "mobx";
 export default class CompanyStore {
 
     constructor() {
-        this._name = ''
+        this._companies = [
+        ]
         makeAutoObservable(this)
     }
 
-    setName(name) {
-        this.name = name
+    setCompanies(companies) {
+        this._companies = companies
     }
 
-    get name() {
-        return this.name
+    get companies() {
+        return this._companies
     }
 
 }

@@ -3,16 +3,18 @@ import {makeAutoObservable} from "mobx";
 export default class PartnerStore {
 
     constructor() {
-        this._name = ''
+        this._partners = [
+
+        ]
         makeAutoObservable(this)
     }
 
-    setName(name) {
-        this.name = name
+    setPartners(partners) {
+        this._partners = partners
     }
 
-    get name() {
-        return this.name
+    get partners() {
+        return this._partners
     }
 
 }
