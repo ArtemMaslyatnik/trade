@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import {Context} from '../index'
-import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE} from "../utils/consts";
+import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 
 const NavBar = observer(() => {
@@ -24,6 +24,12 @@ const NavBar = observer(() => {
           </Nav> 
           <Nav className="me-auto">
             <Nav.Link href={COMPANY_ROUTE}>Компании</Nav.Link> 
+          </Nav> 
+          <Nav className="me-auto">
+            <Nav.Link href={INVOCE_IN_ROUTE}>Приход</Nav.Link> 
+          </Nav> 
+          <Nav className="me-auto">
+            <Nav.Link href={INVOCE_OUT_ROUTE}>Расход</Nav.Link> 
           </Nav> 
         </Container>
       </Navbar>

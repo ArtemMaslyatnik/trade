@@ -43,7 +43,7 @@ class InvoiceOutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.InvoiceOut
-        fields = ['is_active', 'number', 'created_at', 'company',
+        fields = ['id', 'is_active', 'number', 'created_at', 'company',
                   'partner', 'contract', 'invoice_out_list']
 
 
@@ -60,5 +60,5 @@ class InvoiceInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.InvoiceIn
-        fields = ['is_active', 'number', 'created_at', 'company', 'partner',
+        fields = ['id', 'is_active', 'number', 'created_at', 'company', 'partner',
                   'contract', 'invoice_in_list']
