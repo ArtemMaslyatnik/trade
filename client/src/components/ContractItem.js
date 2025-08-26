@@ -1,16 +1,25 @@
-import React from 'react';
-import {Card, Col} from "react-bootstrap";
-import {useNavigate } from "react-router-dom"
-import {CONTRACT_ROUTE} from "../utils/consts";
+import React, { useEffect, useState } from 'react';
+import {Card, Container, ListGroup} from "react-bootstrap";
+import {useParams } from "react-router-dom"
+import { fetchOneContract } from '../service/ContractService';
 
-const ContractItem = ({contract}) => {
-    const navigate = useNavigate ()
+
+const ContractItem = () => {
+    const [contract, setContract] = useState([])
+    const {id} = useParams()
+    useEffect(() => {
+        fetchOneContract(id).then(data => setContract(data))
+    }, [])
     return (
-        <Col md={3} className={"mt-3"} onClick={() => navigate(CONTRACT_ROUTE + '/' + contract.id)}>
-            <Card style={{width: 150, cursor: 'pointer'}} border={"light"}>
-                <div>{contract.name}</div>
-            </Card>
-        </Col>
+        <Container className="mt-3">
+            <Card style={{ width: '18rem' }}>
+                <Card.Header>Данные</Card.Header>
+                    <ListGroup variant="flush">
+                        <ListGroup.Item>код -> {contract.id}</ListGroup.Item>
+                        <ListGroup.Item>наименование -> {contract.name}</ListGroup.Item>
+                    </ListGroup>          
+                </Card>
+        </Container>
     );
 };
 

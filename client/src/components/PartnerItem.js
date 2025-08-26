@@ -1,17 +1,24 @@
-import React from 'react';
-import {Card, Col} from "react-bootstrap";
-import Image from "react-bootstrap/Image";
-import {useNavigate } from "react-router-dom"
-import {PARTNER_ROUTE} from "../utils/consts";
+import React, { useEffect, useState } from 'react';
+import {Card, Container, ListGroup} from "react-bootstrap";
+import { useParams } from "react-router-dom"
+import { fetchOnePartner } from '../service/PartnerService';
 
-const PartnerItem = ({partner}) => {
-    const navigate = useNavigate ()
+const PartnerItem = () => {
+    const [partner, setPartner] = useState([])
+    const {id} = useParams()
+    useEffect(() => {
+        fetchOnePartner(id).then(data => setPartner(data))
+    }, [])
     return (
-        <Col md={3} className={"mt-3"} onClick={() => navigate(PARTNER_ROUTE + '/' + partner.id)}>
-            <Card style={{width: 150, cursor: 'pointer'}} border={"light"}>
-                <div>{partner.name}</div>
-            </Card>
-        </Col>
+        <Container className="mt-3">
+            <Card style={{ width: '18rem' }}>
+                <Card.Header>Данные</Card.Header>
+                    <ListGroup variant="flush">
+                        <ListGroup.Item>код -> {partner.id}</ListGroup.Item>
+                        <ListGroup.Item>наименование -> {partner.name}</ListGroup.Item>
+                    </ListGroup>          
+                </Card>
+        </Container>
     );
 };
 

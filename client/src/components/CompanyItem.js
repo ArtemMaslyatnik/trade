@@ -1,17 +1,25 @@
-import React from 'react';
-import {Card, Col} from "react-bootstrap";
-import {useNavigate } from "react-router-dom"
-import {COMPANY_ROUTE} from "../utils/consts";
+import React, { useEffect, useState } from 'react';
+import {Card, Container, ListGroup} from "react-bootstrap";
+import { fetchOneCompany } from '../service/CompanyService';
+import { useParams } from 'react-router-dom';
 
-const ContractItem = ({company}) => {
-    const navigate = useNavigate ()
+
+const CompanyItem = () => {
+    const [company, setCompany] = useState([])
+    const {id} = useParams()
+    useEffect(() => {
+        fetchOneCompany(id).then(data => setCompany(data))
+    }, [])
     return (
-        <Col md={3} className={"mt-3"} onClick={() => navigate(COMPANY_ROUTE + '/' + company.id)}>
-            <Card style={{width: 150, cursor: 'pointer'}} border={"light"}>
-                <div>{company.name}</div>
-            </Card>
-        </Col>
+        <Container className="mt-3">
+            <Card style={{ width: '18rem' }}>
+                <Card.Header>Данные</Card.Header>
+                    <ListGroup variant="flush">
+                        <ListGroup.Item>код -> {company.id}</ListGroup.Item>
+                        <ListGroup.Item>наименование -> {company.name}</ListGroup.Item>
+                    </ListGroup>          
+                </Card>
+        </Container>
     );
 };
-
-export default ContractItem;
+export default CompanyItem;

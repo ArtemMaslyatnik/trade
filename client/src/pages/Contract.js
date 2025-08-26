@@ -1,10 +1,11 @@
 import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Image, ListGroup, Row} from "react-bootstrap";
 import {useParams} from 'react-router-dom'
 import {fetchContract} from '../service/ContractService';
 import {Context} from "../index";
 import ContractItem from "../components/ContractItem";
+import { CONTRACT_ROUTE } from '../utils/consts';
 
 
 const Contract = observer(() => {
@@ -17,12 +18,12 @@ const Contract = observer(() => {
     }, [])
     return (
         <Container className="mt-3">
-            <Row className="d-flex">
+            <ListGroup >
                 {contract.contracts.map(contract =>
-                <ContractItem key={contract.id} contract={contract}/>
-                )}
-             </Row>
-        </Container>
+                <ListGroup.Item key={contract.id} contract={contract} action href={CONTRACT_ROUTE +'/'+ contract.id}>
+                {contract.id} | {contract.name}</ListGroup.Item> )}
+            </ListGroup>
+         </Container>
     );
 });
 

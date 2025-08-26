@@ -1,10 +1,11 @@
 import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Image, ListGroup, Row} from "react-bootstrap";
 import {useParams} from 'react-router-dom'
 import {fetchPartner} from '../service/PartnerService';
 import {Context} from "../index";
 import PartnerItem from "../components/PartnerItem";
+import { PARTNER_ROUTE } from '../utils/consts';
 
 
 const Partner = observer(() => {
@@ -17,11 +18,12 @@ const Partner = observer(() => {
     }, [])
     return (
         <Container className="mt-3">
-            <Row className="d-flex">
+            <ListGroup >
                 {partner.partners.map(partner =>
-                <PartnerItem key={partner.id} partner={partner}/>
-                )}
-             </Row>
+                <ListGroup.Item key={partner.id} partner={partner} action href={PARTNER_ROUTE +'/'+ partner.id}>
+                {partner.id} | {partner.name}
+                </ListGroup.Item> )}
+            </ListGroup>
         </Container>
     );
 });

@@ -1,17 +1,24 @@
-import React from 'react';
-import {Card, Col} from "react-bootstrap";
-import Image from "react-bootstrap/Image";
-import {useNavigate } from "react-router-dom"
-import {GOODS_ROUTE} from "../utils/consts";
+import React, { useEffect, useState } from 'react';
+import {Card, Container, ListGroup} from "react-bootstrap";
+import { fetchOneGoods } from '../service/GoodsService';
+import { useParams } from 'react-router-dom';
 
-const GoodsItem = ({goods}) => {
-    const navigate = useNavigate ()
+const GoodsItem = () => {
+    const [goods, setGoods] = useState([])
+    const {id} = useParams()
+    useEffect(() => {
+        fetchOneGoods(id).then(data => setGoods(data))
+    }, [])
     return (
-        <Col md={3} className={"mt-3"} onClick={() => navigate(GOODS_ROUTE + '/' + goods.id)}>
-            <Card style={{width: 150, cursor: 'pointer'}} border={"light"}>
-                <div>{goods.name}</div>
-            </Card>
-        </Col>
+        <Container className="mt-3">
+            <Card style={{ width: '18rem' }}>
+                <Card.Header>Данные</Card.Header>
+                    <ListGroup variant="flush">
+                        <ListGroup.Item>код -> {goods.id}</ListGroup.Item>
+                        <ListGroup.Item>наименование -> {goods.name}</ListGroup.Item>
+                    </ListGroup>          
+                </Card>
+        </Container>
     );
 };
 
