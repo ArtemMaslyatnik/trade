@@ -16,11 +16,11 @@ const InvoceInItem = () => {
             <Card style={{ width: '18rem' }}>
                 <Card.Header>Данные</Card.Header>
                     <ListGroup variant="flush">
-                        <ListGroup.Item>код -> {invoceIn.id}</ListGroup.Item>
-                        <ListGroup.Item>Rjv -> {invoceIn.id}</ListGroup.Item>
-                        
-                        company
-                        <ListGroup.Item>наименование -> {invoceIn.name}</ListGroup.Item>
+                        <ListGroup.Item>код -> {invoceIn.number}</ListGroup.Item>
+                        <ListGroup.Item>Дата -> {invoceIn.created_at}</ListGroup.Item>
+                        <ListGroup.Item>Компания -> {invoceIn.company}</ListGroup.Item>
+                        <ListGroup.Item>Партнер -> {invoceIn.partner}</ListGroup.Item>
+                        <ListGroup.Item>Контракт -> {invoceIn.contract}</ListGroup.Item>
                     </ListGroup>          
                 </Card>
         </Container>
