@@ -1,17 +1,18 @@
-import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE} from "./utils/consts";
-import Goods from "./pages/Goods";
+import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE} from "./utils/consts";
 import Maine from "./pages/Main";
 import Contract from "./pages/Contract";
 import Company from "./pages/Company";
 import Partner from "./pages/Partner";
 import InvoceIn from "./pages/InvoceIn";
 import InvoceOut from "./pages/InvoceOut";
-import GoodsItem from "./components/GoodsItem";
+import GoodsItem from "./components/Goods/GoodsItem";
 import CompanyItem from "./components/CompanyItem";
 import ContractItem from "./components/ContractItem";
 import PartnerItem from "./components/PartnerItem";
 import InvoceInItem from "./components/InvoceInItem";
 import InvoceOutItem from "./components/InvoceOutItem";
+import GoodsList from "./pages/Goodslist";
+import CreateGoods from "./components/Goods/CreateGoods";
 
 export const publicRoutes = [
     {
@@ -21,7 +22,11 @@ export const publicRoutes = [
 
     {
         path: GOODS_ROUTE,
-        Element: <Goods/>
+        Element: <GoodsList/>
+    },
+    {
+        path: GOODS_ADD_ROUTE,
+        Element: <CreateGoods/>
     },
     {
         path: GOODS_ROUTE + '/:id',

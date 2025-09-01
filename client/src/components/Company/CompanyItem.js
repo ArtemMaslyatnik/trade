@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Card, Container, ListGroup} from "react-bootstrap";
-import { fetchOneCompany } from '../service/CompanyService';
+import { fetchOneCompany } from '../../service/CompanyService';
 import { useParams } from 'react-router-dom';
 
 
