@@ -8,7 +8,7 @@ import ContractItem from "../components/ContractItem";
 import { CONTRACT_ROUTE } from '../utils/consts';
 
 
-const Contract = observer(() => {
+const ContractList = observer(() => {
     const {contract} = useContext(Context)
 
     useEffect(() => {
@@ -27,4 +27,4 @@ const Contract = observer(() => {
     );
 });
 
-export default Contract;
+export default ContractList;

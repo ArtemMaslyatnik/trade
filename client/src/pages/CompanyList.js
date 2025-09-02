@@ -1,23 +1,24 @@
 import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Card, Col, Container, Image, ListGroup, Row} from "react-bootstrap";
-import {useParams} from 'react-router-dom'
-import {fetchCompany} from '../service/CompanyService';
+import {Button, Container, ListGroup,} from "react-bootstrap";
+import {fetch} from '../service/CompanyService';
 import {Context} from "../index";
-import CompanytItem from "../components/CompanyItem";
-import { COMPANY_ROUTE } from '../utils/consts';
+import { COMPANY_ADD_ROUTE, COMPANY_ROUTE, GOODS_ADD_ROUTE } from '../utils/consts';
+import { useNavigate } from 'react-router-dom';
 
 
-const Company = observer(() => {
+const CompanyList = observer(() => {
     const {company} = useContext(Context)
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchCompany().then(data => {
+        fetch().then(data => {
                     company.setCompanies(data)
                 })
     }, [])
     return (
         <Container className="mt-3">
+            <Button variant="success" onClick={() => navigate(COMPANY_ADD_ROUTE)}>Добавить</Button>
             <ListGroup >
                 {company.companies.map(company =>
                 <ListGroup.Item key={company.id} company={company} action href={COMPANY_ROUTE +'/'+ company.id}>
@@ -28,4 +29,4 @@ const Company = observer(() => {
     );
 });
 
-export default Company;
+export default CompanyList;

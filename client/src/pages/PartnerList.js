@@ -2,17 +2,17 @@ import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Card, Col, Container, Image, ListGroup, Row} from "react-bootstrap";
 import {useParams} from 'react-router-dom'
-import {fetchPartner} from '../service/PartnerService';
+import {fetch} from '../service/PartnerService';
 import {Context} from "../index";
 import PartnerItem from "../components/PartnerItem";
 import { PARTNER_ROUTE } from '../utils/consts';
 
 
-const Partner = observer(() => {
+const PartnerList = observer(() => {
     const {partner} = useContext(Context)
 
     useEffect(() => {
-        fetchPartner().then(data => {
+        fetch().then(data => {
                     partner.setPartners(data)
                 })
     }, [])
@@ -28,4 +28,4 @@ const Partner = observer(() => {
     );
 });
 
-export default Partner;
+export default PartnerList;

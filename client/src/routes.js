@@ -1,18 +1,24 @@
-import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE} from "./utils/consts";
+import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE, COMPANY_ADD_ROUTE, PARTNER_ADD_ROUTE} from "./utils/consts";
 import Maine from "./pages/Main";
-import Contract from "./pages/Contract";
-import Company from "./pages/Company";
-import Partner from "./pages/Partner";
+import Contract from "./pages/ContractList";
+import ContractItem from "./components/ContractItem";
+
+import PartnerList from "./pages/PartnerList";
+import PartnerItem from "./components/PartnerItem";
+
 import InvoceIn from "./pages/InvoceIn";
 import InvoceOut from "./pages/InvoceOut";
-import GoodsItem from "./components/Goods/GoodsItem";
-import CompanyItem from "./components/CompanyItem";
-import ContractItem from "./components/ContractItem";
-import PartnerItem from "./components/PartnerItem";
+
 import InvoceInItem from "./components/InvoceInItem";
 import InvoceOutItem from "./components/InvoceOutItem";
-import GoodsList from "./pages/Goodslist";
+
+import GoodsList from "./pages/GoodsList";
 import CreateGoods from "./components/Goods/CreateGoods";
+import GoodsItem from "./components/Goods/GoodsItem";
+
+import CompanyList from "./pages/CompanyList";
+import CompanyItem from "./components/Company/CompanyItem";
+import CreateCompany from "./components/Company/CreateCompany";
 
 export const publicRoutes = [
     {
@@ -46,14 +52,22 @@ export const publicRoutes = [
         Element: <Partner/>
     },
     {
+        path: PARTNER_ADD_ROUTE,
+        Element: <Partner/>
+    },
+    {
         path: PARTNER_ROUTE + '/:id',
         Element: <PartnerItem/>
     },
     {
         path: COMPANY_ROUTE,
-        Element: <Company/>
+        Element: <CompanyList/>
     },
-        {
+    {
+        path: COMPANY_ADD_ROUTE,
+        Element: <CreateCompany/>
+    },
+    {
         path: COMPANY_ROUTE+ '/:id',
         Element: <CompanyItem/>
     },

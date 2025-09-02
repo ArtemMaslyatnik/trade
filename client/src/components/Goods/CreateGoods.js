@@ -9,7 +9,7 @@ const CreateGoods = () => {
     const navigate = useNavigate();
 
     const addGoods = () => {
-        createGoods({item: value}).then(data => {
+        createGoods({name: value}).then(data => {
             setValue('')
         })
         navigate(GOODS_ROUTE)

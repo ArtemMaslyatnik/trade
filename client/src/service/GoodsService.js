@@ -11,6 +11,7 @@ export const fetchOneGoods = async (id) => {
 }
 
 export const createGoods = async (item) => {
+    console.log(item)
     const {data} = await $api.post('goods/', item)
     return data
 }

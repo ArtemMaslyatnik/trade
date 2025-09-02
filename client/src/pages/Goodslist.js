@@ -1,10 +1,9 @@
 import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Card, Col, Container, Image, ListGroup, Row, Table} from "react-bootstrap";
-import {useNavigate, useParams} from 'react-router-dom'
-import {fetchGoods}from "../service/GoodsService";
+import {Button, Container, ListGroup} from "react-bootstrap";
+import {useNavigate} from 'react-router-dom'
+import {fetch}from "../service/GoodsService";
 import {Context} from "../index";
-import GoodsItem from "../components/Goods/GoodsItem";
 import { GOODS_ADD_ROUTE, GOODS_ROUTE } from '../utils/consts';
 
 const GoodsList = observer(() => {
@@ -12,7 +11,7 @@ const GoodsList = observer(() => {
     const navigate = useNavigate ();
 
     useEffect(() => {
-        fetchGoods().then(data => {
+        fetch().then(data => {
                     goods.setGoods(data)
                 })
     }, [])

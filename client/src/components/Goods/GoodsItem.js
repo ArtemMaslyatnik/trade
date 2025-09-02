@@ -6,7 +6,7 @@ import { GOODS_ROUTE } from '../../utils/consts';
 
 
 const GoodsItem = () => {
-    const [goods, setGoods] = useState({'name': '','is_active':false,'is_group':false})
+    const [goods, setGoods] = useState({'name': '','is_active':'','is_group':''})
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
