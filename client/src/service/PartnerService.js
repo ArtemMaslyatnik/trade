@@ -11,13 +11,11 @@ export const fetchOne = async (id) => {
 }
 
 export const create = async (item) => {
-    console.log(item)
     const {data} = await $api.post('partner/', item)
     return data
 }
 
 export const update = async (id, item) => {
-    console.log(item);
     const {data} = await $api.put('partner/'+ id +'/', item)
     return data
 }

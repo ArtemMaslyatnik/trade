@@ -1,18 +1,17 @@
 import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
-import {Button, Card, Col, Container, Image, ListGroup, Row} from "react-bootstrap";
-import {useParams} from 'react-router-dom'
-import {fetchContract} from '../service/ContractService';
-import {Context} from "../index";
-import ContractItem from "../components/ContractItem";
-import { CONTRACT_ROUTE } from '../utils/consts';
+import {Container, ListGroup} from "react-bootstrap";
+import {Context} from "../../index";
 
+// replace
+import {fetch} from '../../service/ContractService';
+import { CONTRACT_ROUTE } from '../../utils/consts';
 
 const ContractList = observer(() => {
     const {contract} = useContext(Context)
 
     useEffect(() => {
-        fetchContract().then(data => {
+        fetch().then(data => {
                     contract.setContracts(data)
                 })
     }, [])

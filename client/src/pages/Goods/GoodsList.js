@@ -2,9 +2,9 @@ import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Container, ListGroup} from "react-bootstrap";
 import {useNavigate} from 'react-router-dom'
-import {fetch}from "../service/GoodsService";
-import {Context} from "../index";
-import { GOODS_ADD_ROUTE, GOODS_ROUTE } from '../utils/consts';
+import {fetch}from "../../service/GoodsService";
+import {Context} from "../../index";
+import { GOODS_ADD_ROUTE, GOODS_ROUTE } from '../../utils/consts';
 
 const GoodsList = observer(() => {
     const {goods} = useContext(Context);

@@ -1,18 +1,21 @@
 import React, {useState} from 'react';
 import {Form, Button, Container} from "react-bootstrap";
-import {createGoods} from "../../service/GoodsService";
 import { useNavigate } from 'react-router-dom';
-import { GOODS_ROUTE } from '../../utils/consts';
+import { COMPANY_ROUTE } from '../../utils/consts';
+import { create } from '../../service/CompanyService';
 
-const CreateGoods = () => {
+const CompanyCreate = () => {
+    // replace
+    const ROUT = COMPANY_ROUTE
+        
     const [value, setValue] = useState('')
     const navigate = useNavigate();
 
-    const addGoods = () => {
-        createGoods({name: value}).then(data => {
+    const addItem = () => {
+        create({name: value}).then(data => {
             setValue('')
         })
-        navigate(GOODS_ROUTE)
+        navigate(ROUT)
     }
 
     return (
@@ -26,11 +29,11 @@ const CreateGoods = () => {
                 />
                 </Form.Group>
                 <Button variant="outline-danger"
-                        onClick={() => navigate(GOODS_ROUTE)} >
+                        onClick={() => navigate(ROUT)} >
                     Отменить
                 </Button >
                 <Button variant="outline-success" 
-                        onClick={addGoods} >
+                        onClick={addItem} >
                     Submit
                 </Button >
             </Form>
@@ -39,4 +42,4 @@ const CreateGoods = () => {
     );
 };
 
-export default CreateGoods;
+export default CompanyCreate;

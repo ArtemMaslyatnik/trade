@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {Form, Button, Container} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import { PARTNER_ROUTE } from '../../utils/consts';
-import { createCompany } from '../../service/CompanyService';
+import { create } from '../../service/PartnerService';
 
-const CreateCompany = () => {
+const PartnerCreate = () => {
     //replace
     const ROUTE = PARTNER_ROUTE
     
@@ -33,7 +33,7 @@ const CreateCompany = () => {
                     Отменить
                 </Button >
                 <Button variant="outline-success" 
-                        onClick={addCompany} >
+                        onClick={addItem} >
                     Submit
                 </Button >
             </Form>
@@ -42,4 +42,4 @@ const CreateCompany = () => {
     );
 };
 
-export default CreateCompany;
+export default PartnerCreate;

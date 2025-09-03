@@ -1,10 +1,11 @@
 import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE, COMPANY_ADD_ROUTE, PARTNER_ADD_ROUTE} from "./utils/consts";
 import Maine from "./pages/Main";
-import Contract from "./pages/ContractList";
-import ContractItem from "./components/ContractItem";
+import Contract from "./pages/Contract/ContractList";
+import ContractItem from "./pages/Contract/ContractItem";
 
-import PartnerList from "./pages/PartnerList";
-import PartnerItem from "./components/PartnerItem";
+import PartnerList from "./pages/Partner/PartnerList";
+import PartnerItem from "./pages/Partner/PartnerItem";
+import PartnerCreate from "./pages/Partner/PartnerCreate";
 
 import InvoceIn from "./pages/InvoceIn";
 import InvoceOut from "./pages/InvoceOut";
@@ -12,13 +13,14 @@ import InvoceOut from "./pages/InvoceOut";
 import InvoceInItem from "./components/InvoceInItem";
 import InvoceOutItem from "./components/InvoceOutItem";
 
-import GoodsList from "./pages/GoodsList";
-import CreateGoods from "./components/Goods/CreateGoods";
-import GoodsItem from "./components/Goods/GoodsItem";
+import GoodsList from "./pages/Goods/GoodsList";
+import GoodsCreate from "./pages/Goods/GoodsCreate";
+import GoodsItem from "./pages/Goods/GoodsItem";
 
-import CompanyList from "./pages/CompanyList";
-import CompanyItem from "./components/Company/CompanyItem";
-import CreateCompany from "./components/Company/CreateCompany";
+import CompanyList from "./pages/Company/CompanyList";
+import CompanyItem from "./pages/Company/CompanyItem";
+import CompanyCreate from "./pages/Company/CompanyCreate";
+
 
 export const publicRoutes = [
     {
@@ -32,7 +34,7 @@ export const publicRoutes = [
     },
     {
         path: GOODS_ADD_ROUTE,
-        Element: <CreateGoods/>
+        Element: <GoodsCreate/>
     },
     {
         path: GOODS_ROUTE + '/:id',
@@ -49,11 +51,11 @@ export const publicRoutes = [
     },
     {
         path: PARTNER_ROUTE,
-        Element: <Partner/>
+        Element: <PartnerList/>
     },
     {
         path: PARTNER_ADD_ROUTE,
-        Element: <Partner/>
+        Element: <PartnerCreate/>
     },
     {
         path: PARTNER_ROUTE + '/:id',
@@ -65,7 +67,7 @@ export const publicRoutes = [
     },
     {
         path: COMPANY_ADD_ROUTE,
-        Element: <CreateCompany/>
+        Element: <CompanyCreate/>
     },
     {
         path: COMPANY_ROUTE+ '/:id',

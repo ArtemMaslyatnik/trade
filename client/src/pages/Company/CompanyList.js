@@ -1,13 +1,15 @@
 import React, {useEffect, useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Button, Container, ListGroup,} from "react-bootstrap";
-import {fetch} from '../service/CompanyService';
-import {Context} from "../index";
-import { COMPANY_ADD_ROUTE, COMPANY_ROUTE, GOODS_ADD_ROUTE } from '../utils/consts';
+import {Context} from "../../index";
 import { useNavigate } from 'react-router-dom';
+// replace
+import {fetch} from '../../service/CompanyService';
+import { COMPANY_ADD_ROUTE, COMPANY_ROUTE } from '../../utils/consts';
 
 
 const CompanyList = observer(() => {
+
     const {company} = useContext(Context)
     const navigate = useNavigate();
 

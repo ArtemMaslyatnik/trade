@@ -1,23 +1,21 @@
 import $api from "../http";
 
-export const fetchGoods= async () => {
+export const fetch= async () => {
     const {data} = await $api.get('goods/')
     return data
 }
 
-export const fetchOneGoods = async (id) => {
+export const fetchOne = async (id) => {
     const {data} = await $api.get('goods/' + id)
     return data
 }
 
-export const createGoods = async (item) => {
-    console.log(item)
+export const create = async (item) => {
     const {data} = await $api.post('goods/', item)
     return data
 }
 
-export const updateGoods = async (id, item) => {
-    console.log(item);
+export const update = async (id, item) => {
     const {data} = await $api.put('goods/'+ id +'/', item)
     return data
 }

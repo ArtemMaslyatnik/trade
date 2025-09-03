@@ -9,18 +9,21 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PartnerSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Partner
-        fields = '__all__'
-
-
 class ContractSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Contract
         fields = '__all__'
+
+
+class PartnerSerializer(serializers.ModelSerializer):
+
+    contracts = ContractSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Partner
+        fields = ['id', 'name', 'is_group', 'is_parent',
+                  'is_active', 'contracts']
 
 
 class GoodsSerializer(serializers.ModelSerializer):
