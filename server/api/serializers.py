@@ -31,7 +31,7 @@ class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Contract
         fields = ['id', 'name', 'is_group', 'is_parent',
-                  'is_active', 'company', 'partner']
+                  'is_active', 'date', 'company', 'partner']
         depth = 0
 
 

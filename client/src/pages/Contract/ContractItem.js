@@ -10,7 +10,8 @@ import { fetchOne, update } from '../../service/ContractService';
 const ContractItem = () => {
 
     
-    const [item, setItem] = useState({'name': '','is_active':'','is_group':'', 'created_at':''})
+    const [item, setItem] = useState({'name': '','is_active':'','is_group':'', 
+            'created_at':'', 'partner':'', 'company':''})
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
@@ -41,8 +42,8 @@ const ContractItem = () => {
                 <Form.Label>Партнер</Form.Label>
                 <Form.Select disabled>
                     <option 
-                        value={item.partner}>
-                        {item.partner}
+                        value={item.partner.id}>
+                        {item.partner.name}
                     </option>
                 </Form.Select>
                 </Form.Group>
@@ -50,8 +51,8 @@ const ContractItem = () => {
                 <Form.Label>Организация</Form.Label>
                 <Form.Select disabled>
                     <option 
-                        value={item.company}>
-                        {item.company}
+                        value={item.company.id}>
+                        {item.company.name}
                     </option>
                 </Form.Select>
                 </Form.Group>
