@@ -26,13 +26,14 @@ const CompanyItem = () => {
         
     return (
          <Container className="mt-3">
+            <h4>{item.name} (компания)</h4>
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Наименование</Form.Label>
                     <Form.Control
                         value={item.name}
                         onChange={event => setItem({...item, name: event.target.value})}
-                    />
+                />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Check 
@@ -46,7 +47,7 @@ const CompanyItem = () => {
                 <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
-                        label="Папка"
+                        label="Группа"
                         disabled
                         checked={item.is_group}
                         onChange={event => setItem({...item, is_group: event.target.checked})}

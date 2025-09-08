@@ -20,6 +20,7 @@ const PartnerCreate = () => {
 
     return (
         <Container className="mt-3">
+            <h4>Партнер (создание)</h4>
             <Form>
                 <Form.Group className="mb-3">
                 <Form.Label>Наименование</Form.Label>

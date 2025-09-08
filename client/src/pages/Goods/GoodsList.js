@@ -18,6 +18,7 @@ const GoodsList = observer(() => {
 
     return (
         <Container className="mt-3">
+            <h4>Товары</h4>
             <Button variant="success" onClick={() => navigate(GOODS_ADD_ROUTE)}>Добавить</Button>
             <ListGroup >
                 {goods.goods.map(goods =>

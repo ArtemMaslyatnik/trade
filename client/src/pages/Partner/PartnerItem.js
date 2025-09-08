@@ -3,7 +3,7 @@ import {Button, Container, Form, ListGroup} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom"
 // replace
 import { fetchOne, update } from '../../service/PartnerService';
-import { CONTRACT_ROUTE, PARTNER_ROUTE } from '../../utils/consts';
+import { CONTRACT_ADD_ROUTE, CONTRACT_ROUTE, PARTNER_ROUTE } from '../../utils/consts';
 
 const PartnerItem = () => {
     // replace
@@ -14,7 +14,7 @@ const PartnerItem = () => {
 
     const {id} = useParams()
     const navigate = useNavigate();
-    console.log(item.contracts)
+
     useEffect(() => {
         fetchOne(id).then(data => setItem(data)).finally(() => setLoading(false))
     }, [])
@@ -26,6 +26,7 @@ const PartnerItem = () => {
         }
     return (
          <Container className="mt-3">
+            <h4>{item.name} (партнер)</h4>
             <Form>
                 <Button variant="outline-success"
                         onClick={updateItem} >
@@ -54,7 +55,7 @@ const PartnerItem = () => {
                 <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
-                        label="Папка"
+                        label="Группа"
                         disabled
                         checked={item.is_group}
                         onChange={event => setItem({...item, is_group: event.target.checked})}
@@ -64,13 +65,20 @@ const PartnerItem = () => {
             {loading ? (
             <p>Договора...</p>
             )    : (
-                <ListGroup >
-                    <ListGroup.Item>Договора</ListGroup.Item>
-                    {item.contracts.map(contract =>
-                    <ListGroup.Item key={contract.id} contract={contract} action href={CONTRACT_ROUTE +'/'+ contract.id}>
-                    {contract.id} | {contract.name}
-                    </ListGroup.Item> )}
-                </ListGroup>
+                <div>
+                    <Button 
+                        variant="outline-success" 
+                        onClick={() => navigate(CONTRACT_ADD_ROUTE, { state : { partner: item } })}>
+                            +
+                    </Button>
+                    <ListGroup >
+                        <ListGroup.Item>Договора</ListGroup.Item>
+                        {item.contracts.map(contract =>
+                        <ListGroup.Item key={contract.id} contract={contract} action href={CONTRACT_ROUTE +'/'+ contract.id}>
+                        {contract.id} | {contract.name}
+                        </ListGroup.Item> )}
+                    </ListGroup>
+                </div>
             )}
         </Container>
     );

@@ -18,6 +18,7 @@ const PartnerList = observer(() => {
     }, [])
     return (
         <Container className="mt-3">
+            <h4>Партнеры</h4>
             <Button variant="success" onClick={() => navigate(PARTNER_ADD_ROUTE)}>Добавить</Button>   
             <ListGroup >
                 {partner.partners.map(partner =>

@@ -2,6 +2,20 @@ from rest_framework import serializers
 from api import models
 
 
+class SimpleCompanySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Company
+        fields = ['id', 'name']
+
+
+class SimplePartnerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Partner
+        fields = ['id', 'name']
+
+
 class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -11,9 +25,14 @@ class CompanySerializer(serializers.ModelSerializer):
 
 class ContractSerializer(serializers.ModelSerializer):
 
+    company = SimpleCompanySerializer()
+    partner = SimplePartnerSerializer()
+
     class Meta:
         model = models.Contract
-        fields = '__all__'
+        fields = ['id', 'name', 'is_group', 'is_parent',
+                  'is_active', 'company', 'partner']
+        depth = 0
 
 
 class PartnerSerializer(serializers.ModelSerializer):
@@ -24,6 +43,7 @@ class PartnerSerializer(serializers.ModelSerializer):
         model = models.Partner
         fields = ['id', 'name', 'is_group', 'is_parent',
                   'is_active', 'contracts']
+        depth = 0
 
 
 class GoodsSerializer(serializers.ModelSerializer):

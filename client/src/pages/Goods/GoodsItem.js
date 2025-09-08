@@ -9,44 +9,45 @@ const GoodsItem = () => {
     // replace
     const ROUT = GOODS_ROUTE
     
-    const [goods, setItem] = useState({'name': '','is_active':'','is_group':''})
+    const [item, setItem] = useState({'name': '','is_active':'','is_group':''})
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
         fetchOne(id).then(data => setItem(data))
     }, [])
     const updateItem = () => {
-            update(id, goods).then(data => {
+            update(id, item).then(data => {
                 setItem('')
             })
             navigate(ROUT)
         }
     return (
          <Container className="mt-3">
+            <h4>{item.name} (товар)</h4>
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Наименование</Form.Label>
                     <Form.Control
-                        value={goods.name}
-                        onChange={event => setItem({...goods, name: event.target.value})}
+                        value={item.name}
+                        onChange={event => setItem({...item, name: event.target.value})}
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
                         label="Активный" 
-                        checked={goods.is_active}
-                        onChange={event => setItem({...goods, is_active: event.target.checked})}
+                        checked={item.is_active}
+                        onChange={event => setItem({...item, is_active: event.target.checked})}
 
                     />
                 </Form.Group>
                     <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
-                        label="Папка"
+                        label="Группа"
                         disabled
-                        checked={goods.is_group}
-                        onChange={event => setItem({...goods, is_group: event.target.checked})}
+                        checked={item.is_group}
+                        onChange={event => setItem({...item, is_group: event.target.checked})}
                     />
                 </Form.Group>
                 <Button variant="outline-success"

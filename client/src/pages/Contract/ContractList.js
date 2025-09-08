@@ -17,6 +17,7 @@ const ContractList = observer(() => {
     }, [])
     return (
         <Container className="mt-3">
+            <h4>Договора</h4>
             <ListGroup >
                 {contract.contracts.map(contract =>
                 <ListGroup.Item key={contract.id} contract={contract} action href={CONTRACT_ROUTE +'/'+ contract.id}>

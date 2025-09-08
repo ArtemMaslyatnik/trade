@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Button, Card, Container, Form, ListGroup} from "react-bootstrap";
+import {Button, Container, Form} from "react-bootstrap";
 import {useNavigate, useParams } from "react-router-dom"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,10 +13,10 @@ const ContractItem = () => {
     const [item, setItem] = useState({'name': '','is_active':'','is_group':'', 'created_at':''})
     const {id} = useParams()
     const navigate = useNavigate();
-    console.log(item.created_at)
     useEffect(() => {
         fetchOne(id).then(data => setItem(data))
     }, [])
+    console.log(item)
     
     const updateItem = () => {
                 update(id, item).then(data => {
@@ -27,6 +27,7 @@ const ContractItem = () => {
 
     return (
         <Container className="mt-3">
+            <h4>{item.name} (договор)</h4>
             <Form>
                 <Button variant="outline-success"
                         onClick={updateItem} >
@@ -37,6 +38,24 @@ const ContractItem = () => {
                     Отменить
                 </Button >
                 <Form.Group className="mb-3">
+                <Form.Label>Партнер</Form.Label>
+                <Form.Select disabled>
+                    <option 
+                        value={item.partner}>
+                        {item.partner}
+                    </option>
+                </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                <Form.Label>Организация</Form.Label>
+                <Form.Select disabled>
+                    <option 
+                        value={item.company}>
+                        {item.company}
+                    </option>
+                </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>Наименование</Form.Label>
                     <Form.Control
                         value={item.name}
@@ -46,10 +65,10 @@ const ContractItem = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Дата договора :</Form.Label>
                     <DatePicker 
-                        selected={item.created_at} 
-                        onChange={(date) => setItem({...item, created_at: date})} 
+                        selected={item.date} 
+                        onChange={(date) => setItem({...item, date: date})} 
                         dateFormat = "dd.MM.yyyy"/>
-                    </Form.Group>
+                </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
@@ -61,7 +80,7 @@ const ContractItem = () => {
                 <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
-                        label="Папка"
+                        label="Группа"
                         disabled
                         checked={item.is_group}
                         onChange={event => setItem({...item, is_group: event.target.checked})}

@@ -21,6 +21,7 @@ const GoodsCreate = () => {
 
     return (
         <Container className="mt-3">
+            <h4>Товар (создание)</h4>
             <Form>
                 <Form.Group className="mb-3">
                 <Form.Label>Наименование</Form.Label>

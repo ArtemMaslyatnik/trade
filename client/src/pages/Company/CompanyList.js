@@ -20,6 +20,7 @@ const CompanyList = observer(() => {
     }, [])
     return (
         <Container className="mt-3">
+            <h4>Компании</h4>
             <Button variant="success" onClick={() => navigate(COMPANY_ADD_ROUTE)}>Добавить</Button>
             <ListGroup >
                 {company.companies.map(company =>

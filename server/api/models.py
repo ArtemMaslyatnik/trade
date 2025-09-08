@@ -43,7 +43,8 @@ class Partner(Catalog):
 
 class Contract(Catalog):
     id = models.BigAutoField
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    company = models.ForeignKey(Company,  on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner, related_name='contracts', on_delete=models.CASCADE)
 
 

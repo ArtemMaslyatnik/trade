@@ -20,6 +20,7 @@ const CompanyCreate = () => {
 
     return (
         <Container className="mt-3">
+            <h4>Компания (создание)</h4>
             <Form>
                 <Form.Group className="mb-3">
                 <Form.Label>Наименование</Form.Label>
