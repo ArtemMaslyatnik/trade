@@ -10,7 +10,7 @@ import { PARTNER_ADD_ROUTE, PARTNER_ROUTE } from '../../utils/consts';
 const PartnerList = observer(() => {
     const {partner} = useContext(Context)
     const navigate = useNavigate();
-
+    console.log(partner)
     useEffect(() => {
         fetch().then(data => {
                     partner.setPartners(data)

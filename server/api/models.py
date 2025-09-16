@@ -18,6 +18,7 @@ class Catalog(models.Model):
 class Document(models.Model):
     number = models.BigIntegerField()
     is_active = models.BooleanField(default=True, null=False, blank=False)
+    date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -71,7 +72,7 @@ class InvoiceOutList(List):
 class InvoiceIn(Document):
     id = models.BigAutoField
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
+    partner = models.ForeignKey(Partner,  on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
 
 
