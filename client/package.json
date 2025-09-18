@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.7",
+    "dayjs": "^1.11.18",
     "mobx-react": "^9.2.0",
     "mobx-react-lite": "^4.1.0",
     "react": "^19.1.1",

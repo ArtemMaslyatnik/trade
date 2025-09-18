@@ -1,34 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import {Button, Container, Form, ListGroup} from "react-bootstrap";
+import {Form, ListGroup} from "react-bootstrap";
 import {useNavigate, useParams } from "react-router-dom"
+import { Box, Button, Checkbox, Container, FormGroup} from '@mui/material';
+import { FormControl } from '@mui/material';
 
-import "react-datepicker/dist/react-datepicker.css";
-import { Context } from '../../index';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import 'dayjs/locale/ru';
 // replace
 import { fetchOne, update } from '../../service/InvoceInService';
-import context from 'react-bootstrap/esm/AccordionContext';
-import { fetch } from '../../service/CompanyService';
+import { fetch as fetchCompany } from '../../service/CompanyService';
+import { fetch as fetchPartner } from '../../service/PartnerService';
+import dayjs from 'dayjs';
+// import DatePicker from 'react-datepicker';
+
 
 
 const InvoceInItem = () => {
-    interface AutocompleteOption {
-        label: string;
-    }
-    const [item, setItem] = useState({'number': '','is_active':'', 
+
+    const [item, setItem] = useState({'number': '','is_active':'', 'date':dayjs(), 
             'created_at':'', 'company':'', 'partner':'',  'contract':''})
     const [loading, setLoading] = useState(true); // Состояние для отслеживания загрузки
-    const [loadingCompany, setLoadingCompany] = useState(true); // Состояние для отслеживания загрузки
     const [companyItems, setCompany] = useState([]);
+    const [partnerItems, setPartner] = useState([]);
+    const [contractItems, setPartner] = useState([]);
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
         fetchOne(id).then(data => setItem(data)).finally(() => setLoading(false))
+        fetchCompany().then(data => setCompany(data))
+        fetchPartner().then(data => setPartner(data))
     }, [])
-    useEffect(() => {
-        fetch().then(data => setCompany(data)).finally(() => setLoadingCompany(false))
-    }, [])
+
     
     const updateItem = () => {
                 update(id, item).then(data => {
@@ -36,96 +42,84 @@ const InvoceInItem = () => {
                 })
                 navigate(-1)
     }
-    // function getOptions(id, option) {
-    //     return id === option.id ?(<option key={option.id} value={option.name} selected>
-    //     {option.name}
-    //     </option>):(<option key={option.id} value={option.name}>
-    //     {option.name}
-    //     </option>)
-    // }
-    const getArrOptions = companyItems.map(option => {
-        return {label: option.name};
-    })
-
+ 
     console.log(item);
     // console.log(getArrOptions);
   
     return (
         <Container className="mt-3">
             <h4>{item.number} (приход)</h4>
-            <Form>
-                <Button variant="outline-success"
+            <Box>
+                <Button variant="contained"
                         onClick={updateItem} >
                     Сохранить
                 </Button >
-                <Button variant="outline-danger"
+                <Button variant="outlined"
                         onClick={() => navigate(-1)} >
                     Отменить
                 </Button >
-                <Form.Group className="mb-3">
-                    <Form.Check 
+                <FormGroup className="mb-3">
+                    <Checkbox
                         type="checkbox" 
                         label="Активный" 
                         checked={item.is_active}
                         onChange={event => setItem({...item, is_active: event.target.checked})}
                     />
-                    <Form.Control
+                    <TextField 
+                        id="outlined-basic" 
+                        label="Номер" 
+                        variant="outlined" 
+                        value={item.number}
+                    />
+                    <FormControl
                         value={item.number}
                         onChange={event => setItem({...item, number: event.target.value})}
                     />
-                    <Form.Label>Дата :</Form.Label>
-                    <DatePick
-                        selected={item.date}
-                        onChange={(date) => setItem({...item, date: date})}
-                        dateFormat = "dd.MM.yyyy" />
-                    <DatePicker 
-                        selected={item.date} 
-                        onChange={(date) => setItem({...item, date: date})} 
-                        dateFormat = "dd.MM.yyyy"/>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                <Form.Label>Копания</Form.Label>
+                </FormGroup>
+                <FormGroup className="mb-3">
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+                        <DateTimePicker
+                            label="Дата"
+                            value={dayjs(item.date)}
+                            onChange={(newValue) => setItem({...item, date: newValue.$d})} 
+                        /> 
+                    </LocalizationProvider>
+                </FormGroup>
+                <FormGroup className="mb-3">
                     <Autocomplete
                         getOptionLabel={(option) => option.name || ""}
                         options={companyItems}
                         value={item.company}
                         onChange={(event, newValue)  => setItem({...item, company: newValue})}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params} label="Копания"  />}
                         
                     />
-
-                {/* <Form.Select
-                    value={item.company.id}
-                    onChange={event => setItem({...item, company: event.target.value})}
-                >
-                    {loadingCompany ? (
-                        <option>Загрузка...</option>
-                    ) : companyItems.length > 0 ? (
-                    companyItems.map(option => getOptions(item.company.id, option))
-                    ) : (
-                    <option>Нет данных</option>
-                    )}
-                </Form.Select>  */}
-                </Form.Group>
-                <Form.Group className="mb-3">
-                <Form.Label>Партнер</Form.Label>
-                <Form.Select>
-                    <option 
-                        value={item.partner.id}>
-                        {item.partner.name}
-                    </option>
-                </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                <Form.Label>Договор</Form.Label>
+                </FormGroup>
+                <FormGroup className="mb-3">
+                    <Autocomplete
+                        getOptionLabel={(option) => option.name || ""}
+                        options={partnerItems}
+                        value={item.partner}
+                        onChange={(event, newValue)  => setItem({...item, partner: newValue})}
+                        renderInput={(params) => <TextField {...params} label="Партнер" />}
+                    />
+                </FormGroup>
+                <FormGroup className="mb-3">
+                    <Autocomplete
+                        getOptionLabel={(option) => option.name || ""}
+                        options={partnerItems}
+                        value={item.partner}
+                        onChange={(event, newValue)  => setItem({...item, partner: newValue})}
+                        renderInput={(params) => <TextField {...params} label="Договор" />}
+                    />
                 <Form.Select>
                     <option 
                         value={item.contract.id}>
                         {item.contract.name}
                     </option>
                 </Form.Select>
-                </Form.Group>
-            </Form>
+                </FormGroup>
+            </Box>
                         {loading ? (
             <p>Товары...</p>
             )    : (
