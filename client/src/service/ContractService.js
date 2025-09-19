@@ -1,7 +1,7 @@
 import $api from "../http";
 
-export const fetch = async () => {
-    const {data} = await $api.get('contract/')
+export const fetch = async (id, company, partner) => {
+    const {data} = await $api.get('contract/', {params: {id, company, partner}})
     return data
 }
 
@@ -9,6 +9,7 @@ export const fetchOne = async (id) => {
     const {data} = await $api.get('contract/' + id)
     return data
 }
+
 
 export const create = async (item) => {
     console.log(item)

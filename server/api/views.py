@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from api import models
 from api import serializers
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 # Catalogs
@@ -17,6 +18,9 @@ class PartnerViewSet(viewsets.ModelViewSet):
 
 
 class ContractViewSet(viewsets.ModelViewSet):
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id', 'company', 'partner']
 
     queryset = models.Contract.objects.all()
     serializer_class = serializers.ContractSerializer

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {Form, ListGroup} from "react-bootstrap";
+import {observer} from "mobx-react-lite";
 import {useNavigate, useParams } from "react-router-dom"
-import { Box, Button, Checkbox, Container, FormGroup} from '@mui/material';
+import { Box, Button, Checkbox, Container, FormGroup, List, ListItem} from '@mui/material';
 import { FormControl } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,7 @@ import 'dayjs/locale/ru';
 import { fetchOne, update } from '../../service/InvoceInService';
 import { fetch as fetchCompany } from '../../service/CompanyService';
 import { fetch as fetchPartner } from '../../service/PartnerService';
+import { fetch as fetchContract } from '../../service/ContractService';
 import dayjs from 'dayjs';
 // import DatePicker from 'react-datepicker';
 
@@ -26,14 +27,21 @@ const InvoceInItem = () => {
     const [loading, setLoading] = useState(true); // Состояние для отслеживания загрузки
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
-    const [contractItems, setPartner] = useState([]);
+    const [contractItems, setContract] = useState([]);
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
         fetchOne(id).then(data => setItem(data)).finally(() => setLoading(false))
         fetchCompany().then(data => setCompany(data))
         fetchPartner().then(data => setPartner(data))
+        fetchContract(null, null, null).then(data => setContract(data))
     }, [])
+
+    useEffect(() => {
+        fetchContract(null, item.company.id, item.partner.id).then(data => setContract(data));
+        setItem({...item, contract: null});
+        
+    }, [item.company.id, item.partner.id])
 
     
     const updateItem = () => {
@@ -43,7 +51,7 @@ const InvoceInItem = () => {
                 navigate(-1)
     }
  
-    console.log(item);
+    console.log(contractItems);
     // console.log(getArrOptions);
   
     return (
@@ -107,34 +115,30 @@ const InvoceInItem = () => {
                 <FormGroup className="mb-3">
                     <Autocomplete
                         getOptionLabel={(option) => option.name || ""}
-                        options={partnerItems}
-                        value={item.partner}
-                        onChange={(event, newValue)  => setItem({...item, partner: newValue})}
+                        options={contractItems}
+                        value={item.contract}
+                        onChange={(event, newValue)  => setItem({...item, contract: newValue})}
                         renderInput={(params) => <TextField {...params} label="Договор" />}
                     />
-                <Form.Select>
-                    <option 
-                        value={item.contract.id}>
-                        {item.contract.name}
-                    </option>
-                </Form.Select>
                 </FormGroup>
             </Box>
                         {loading ? (
             <p>Товары...</p>
             )    : (
                 <div>
-                    <ListGroup >
-                        <ListGroup.Item>Товары</ListGroup.Item>
-                        {item.invoice_in_list.map(item =>
-                        <ListGroup.Item key={item.number}  >
-                        {item.goods.name} | {item.price} | {item.price}
-                        </ListGroup.Item> )}
-                    </ListGroup>
+                    <List>
+                        <ListItem >Товары</ListItem>
+                            {item.invoice_in_list.map(item =>
+                            <Box>                             
+                                <ListItem key={item.number}  >
+                                {item.goods.name} | {item.price} | {item.price}
+                                </ListItem>   
+                            </Box>)}
+                    </List>
                 </div>
             )}
         </Container>
     );
 };
 
-export default InvoceInItem;
+export default observer(InvoceInItem);
