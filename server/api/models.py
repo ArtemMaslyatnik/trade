@@ -59,6 +59,7 @@ class InvoiceOut(Document):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    total = models.BigIntegerField()
 
 
 class InvoiceOutList(List):
@@ -67,6 +68,7 @@ class InvoiceOutList(List):
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     price = models.BigIntegerField()
     quantity = models.BigIntegerField()
+    sum = models.BigIntegerField()
 
 
 class InvoiceIn(Document):
@@ -74,6 +76,7 @@ class InvoiceIn(Document):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner,  on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    total = models.BigIntegerField()
 
 
 class InvoiceInList(List):
@@ -82,3 +85,4 @@ class InvoiceInList(List):
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     price = models.BigIntegerField()
     quantity = models.BigIntegerField()
+    sum = models.BigIntegerField()

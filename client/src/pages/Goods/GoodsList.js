@@ -15,7 +15,7 @@ const GoodsList = observer(() => {
                     goods.setGoods(data)
                 })
     }, [])
-
+    console.log(goods)
     return (
         <Container className="mt-3">
             <h4>Товары</h4>

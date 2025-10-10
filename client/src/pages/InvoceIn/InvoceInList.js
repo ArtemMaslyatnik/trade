@@ -5,6 +5,8 @@ import {useNavigate} from 'react-router-dom'
 import {Context} from "../../index";
 import { fetch} from '../../service/InvoceInService';
 import { INVOCE_IN_ADD_ROUTE, INVOCE_IN_ROUTE } from '../../utils/consts';
+import { Box, Link } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 
 
 const InvoceInList = observer(() => {
@@ -15,17 +17,50 @@ const InvoceInList = observer(() => {
                     invoceIn.setInvoceIns(data)
                 })
     }, [])
+    const columns = [
+        { field: 'number', headerName: '№', width: 90, 
+            renderCell: (params) => (
+            <Link href={INVOCE_IN_ROUTE + `/${params.row.id}` } >
+                {params.value} {/* params.value would be the 'name' in this case */}
+            </Link>
+        ),
+        },
+        { field: 'is_active', headerName: 'Активный', width: 90,
+        },
+        { field: 'date', headerName: 'дата', width: 90,
+        },
+        { field: 'company', headerName: 'компания', width: 90,
+            valueGetter: (row) => (row.name)
+        },
+        { field: 'partner', headerName: 'партнеры', width: 90,
+            valueGetter: (row) => (row.name)
+        },
+        { field: 'contract', headerName: 'партнеры', width: 90,
+            valueGetter: (row) => (row.name)
+        },
+
+
+
+
+    ];
     return (
-        <Container className="mt-3">
-            <h4>Приход</h4>
-            <Button variant="success" onClick={() => navigate(INVOCE_IN_ADD_ROUTE)}>Добавить</Button>   
-            <ListGroup >
-                {invoceIn.invoceIns.map(invoceIn =>
-                <ListGroup.Item key={invoceIn.id} invocein={invoceIn} action href={INVOCE_IN_ROUTE +'/'+ invoceIn.id}>
-                {invoceIn.id}
-                </ListGroup.Item> )} 
-            </ListGroup>
-        </Container>
+            <Box sx={{ height: 400, width: '100%' }}>
+                <Button variant="success" onClick={() => navigate(INVOCE_IN_ADD_ROUTE)}>Добавить</Button>   
+                <DataGrid
+                    rows={invoceIn.invoceIns}
+                    columns={columns}
+                    initialState={{
+                    pagination: {
+                         paginationModel: {
+                         pageSize: 5,
+                         },
+                     },
+                     }}
+                     pageSizeOptions={[5]}
+                    checkboxSelection
+                    disableRowSelectionOnClick
+                />
+            </Box>
     );
 });
 
