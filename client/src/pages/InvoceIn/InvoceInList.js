@@ -35,7 +35,7 @@ const InvoceInList = observer(() => {
         { field: 'partner', headerName: 'партнеры', width: 90,
             valueGetter: (row) => (row.name)
         },
-        { field: 'contract', headerName: 'партнеры', width: 90,
+        { field: 'contract', headerName: 'Договор', width: 90,
             valueGetter: (row) => (row.name)
         },
 

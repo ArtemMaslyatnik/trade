@@ -10,6 +10,7 @@ import PartnerCreate from "./pages/Partner/PartnerCreate";
 
 import InvoceInList from "./pages/InvoceIn/InvoceInList";
 import InvoceInItem from "./pages/InvoceIn/InvoceInItem";
+import InvoceInCreate from "./pages/InvoceIn/InvoceInCreate";
 
 import InvoceOut from "./pages/InvoceOut";
 import InvoceOutItem from "./components/InvoceOutItem";
@@ -47,7 +48,7 @@ export const publicRoutes = [
         path: CONTRACT_ROUTE,
         Element: <Contract/>
     },
-        {
+    {
         path: CONTRACT_ADD_ROUTE,
         Element: <ContractCreate/>
     },
@@ -85,7 +86,7 @@ export const publicRoutes = [
     },
         {
         path: INVOCE_IN_ADD_ROUTE,
-        Element: <InvoceInItem/>
+        Element: <InvoceInCreate/>
     },
     {
         path: INVOCE_IN_ROUTE+ '/:id',

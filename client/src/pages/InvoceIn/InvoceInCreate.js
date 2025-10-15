@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {observer} from "mobx-react-lite";
-import {useNavigate, useParams } from "react-router-dom"
-import { Box, Button, Checkbox, Container, FormGroup, MenuItem, Select, Tooltip} from '@mui/material';
+import {useNavigate} from "react-router-dom"
+import { Box, Button, Checkbox, Container, FormGroup, Tooltip} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import TextField from '@mui/material/TextField';
@@ -11,7 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import 'dayjs/locale/ru';
 // replace
-import { fetchOne, update } from '../../service/InvoceInService';
+import { create } from '../../service/InvoceInService';
 import { fetch as fetchCompany } from '../../service/CompanyService';
 import { fetch as fetchPartner } from '../../service/PartnerService';
 import { fetch as fetchContract } from '../../service/ContractService';
@@ -27,22 +27,20 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 
 
 
-const InvoceInItem = () => {
+const InvoceInCreate = () => {
 
     const [item, setItem] = useState({'number': '','is_active':'', 'date':dayjs(), 'total':0,
             'invoice_in_list':[],'created_at':'', 'company':'', 'partner':'',  'contract':''})
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
     const [contractItems, setContract] = useState([]);
-    const {id} = useParams()
     const navigate = useNavigate();
      
     useEffect(() => {
-        fetchOne(id).then(data => setItem(data))
         fetchCompany().then(data => setCompany(data))
         fetchPartner().then(data => setPartner(data))
         fetchContract(null, null, null).then(data => setContract(data))
-     }, [])
+    }, [])
 
     useEffect(() => {
         fetchContract(null, item.company.id, item.partner.id).then(data => setContract(data));
@@ -50,11 +48,11 @@ const InvoceInItem = () => {
         
     }, [])
 
-    const updateItem = () => {
-                update(id, item).then(data => {
-                    setItem('')
-                })
-                navigate(-1)
+    const addItem = () => {
+        create(item).then(data => {
+            setItem('')
+        })
+        navigate(-1)
     }
  
    const handleProcessRowUpdate =(newRow, oldRow) => {
@@ -178,7 +176,7 @@ const InvoceInItem = () => {
             <h4>{item.number} (приход)</h4>
             <Box>
                 <Button variant="contained"
-                        onClick={updateItem} >
+                        onClick={addItem} >
                     Сохранить
                 </Button >
                 <Button variant="outlined"
@@ -209,16 +207,6 @@ const InvoceInItem = () => {
                     </LocalizationProvider>
                 </FormGroup>
                 <FormGroup className="mb-3">
-                    {/* <Select 
-                        value={item.company}
-                        onChange={(event)  => setItem({...item, company: event.target.value})}
-                        >
-                            {companyItems.map((option) => (
-                                <MenuItem key={option.id} value={option.id}>
-                                    {option.name}
-                                </MenuItem>
-                            ))}
-                    </Select> */}
                     <Autocomplete
                         getOptionLabel={(option) => option.name || ""}
                         options={companyItems}
@@ -257,14 +245,13 @@ const InvoceInItem = () => {
                     onProcessRowUpdateError={handleProcessRowUpdateError}
                     slots={{ toolbar: EditToolbar }}
                     slotProps={{
-                        toolbar: { setItem},
+                        toolbar: { setItem },
                     }}
                     showToolbar
                     hideFooter
                 />            
             </Box>
             <TextField 
-                disabled
                 type="number"
                 variant="filled" 
                 value={item.total}
@@ -275,4 +262,4 @@ const InvoceInItem = () => {
     );
 };
 
-export default observer(InvoceInItem);
+export default observer(InvoceInCreate);

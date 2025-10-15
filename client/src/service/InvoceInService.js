@@ -16,7 +16,6 @@ export const create = async (item) => {
 }
 
 export const update = async (id, item) => {
-
     const {data} = await $api.put('invoice_in/'+ id +'/', item)
     return data
 }

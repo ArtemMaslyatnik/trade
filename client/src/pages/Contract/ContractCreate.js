@@ -26,14 +26,14 @@ const ContractCreate = () => {
                     company.setCompanies(data)
                 })
     }, [])
-    console.log(item)
+    // console.log(item)
     const addItem = () => {
         create(item).then(data => {
             setItem('')
         })
         navigate(-1)
     }
-
+    console.log(item);
     return (
         <Container className="mt-3">
             <h4>Договор (создание)</h4>
@@ -42,7 +42,7 @@ const ContractCreate = () => {
                 <Form.Label>Партнер</Form.Label>
                 <Form.Select disabled>
                     <option 
-                        value={state.partner.id}>
+                        value={state.partner.id || ''}>
                         {state.partner.name}
                     </option>
                 </Form.Select>
