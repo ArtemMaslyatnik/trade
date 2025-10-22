@@ -29,8 +29,8 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 
 const InvoceInCreate = () => {
 
-    const [item, setItem] = useState({'number': '','is_active':'', 'date':dayjs(), 'total':0,
-            'invoice_in_list':[],'created_at':'', 'company':'', 'partner':'',  'contract':''})
+    const [item, setItem] = useState({'number': 0,'is_active':false, 'date':dayjs(), 'total':0,
+            'invoice_in_list':[],'company':null, 'partner':null,  'contract':null})
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
     const [contractItems, setContract] = useState([]);
@@ -43,10 +43,11 @@ const InvoceInCreate = () => {
     }, [])
 
     useEffect(() => {
+        if (item.company === null || item.partner === null) {
+        fetchContract(null, null, null).then(data => setContract(data));
+        } else
         fetchContract(null, item.company.id, item.partner.id).then(data => setContract(data));
-        setItem({...item, contract: null});
-        
-    }, [])
+    }, [item.company, item.partner])
 
     const addItem = () => {
         create(item).then(data => {
@@ -169,7 +170,7 @@ const InvoceInCreate = () => {
 
 
     // console.log(list);
-   console.log(item);
+   //console.log(item);
   
     return (
         <Container className="mt-3">
@@ -192,6 +193,7 @@ const InvoceInCreate = () => {
                     />
                     <TextField 
                         label="Номер" 
+                        type="number"
                         variant="outlined" 
                         value={item.number}
                         onChange={event => setItem({...item, number: event.target.value})}

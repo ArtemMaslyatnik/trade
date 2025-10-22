@@ -43,6 +43,7 @@ class Partner(Catalog):
 
 
 class Contract(Catalog):
+
     id = models.BigAutoField
     date = models.DateTimeField()
     company = models.ForeignKey(Company,  on_delete=models.CASCADE)
@@ -73,16 +74,16 @@ class InvoiceOutList(List):
 
 class InvoiceIn(Document):
     id = models.BigAutoField
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    partner = models.ForeignKey(Partner,  on_delete=models.CASCADE)
-    contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
+    partner = models.ForeignKey(Partner, null=True, on_delete=models.CASCADE)
+    contract = models.ForeignKey(Contract, null=True, on_delete=models.CASCADE)
     total = models.BigIntegerField()
 
 
 class InvoiceInList(List):
     id = models.BigAutoField
     invoice_in = models.ForeignKey(InvoiceIn, related_name='invoice_in_list', on_delete=models.CASCADE)
-    goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, null=True, on_delete=models.CASCADE)
     price = models.BigIntegerField()
     quantity = models.BigIntegerField()
     sum = models.BigIntegerField()

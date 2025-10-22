@@ -30,13 +30,13 @@ const InvoceInList = observer(() => {
         { field: 'date', headerName: 'дата', width: 90,
         },
         { field: 'company', headerName: 'компания', width: 90,
-            valueGetter: (row) => (row.name)
+            valueGetter: (row) => (row?.name)
         },
         { field: 'partner', headerName: 'партнеры', width: 90,
-            valueGetter: (row) => (row.name)
+            valueGetter: (row) => (row?.name)
         },
         { field: 'contract', headerName: 'Договор', width: 90,
-            valueGetter: (row) => (row.name)
+            valueGetter: (row) => (row?.name)
         },
 
 

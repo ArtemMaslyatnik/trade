@@ -29,8 +29,8 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 
 const InvoceInItem = () => {
 
-    const [item, setItem] = useState({'number': '','is_active':'', 'date':dayjs(), 'total':0,
-            'invoice_in_list':[],'created_at':'', 'company':'', 'partner':'',  'contract':''})
+    const [item, setItem] = useState({'number': 0,'is_active':false, 'date':dayjs(), 'total':0,
+            'invoice_in_list':[],'company':'', 'partner':'',  'contract':null})
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
     const [contractItems, setContract] = useState([]);
@@ -45,10 +45,12 @@ const InvoceInItem = () => {
      }, [])
 
     useEffect(() => {
+        if (item.company === null || item.partner === null) {
+        fetchContract(null, null, null).then(data => setContract(data));
+        } else
         fetchContract(null, item.company.id, item.partner.id).then(data => setContract(data));
-        setItem({...item, contract: null});
-        
-    }, [])
+        // setItem({...item, contract: null});        
+    }, [item.company, item.partner])
 
     const updateItem = () => {
                 update(id, item).then(data => {
@@ -170,8 +172,8 @@ const InvoceInItem = () => {
 
 
 
-    // console.log(list);
-   console.log(item);
+    //console.log(contractItems);
+   //console.log(item);
   
     return (
         <Container className="mt-3">
@@ -194,6 +196,7 @@ const InvoceInItem = () => {
                     />
                     <TextField 
                         label="Номер" 
+                        type="number"
                         variant="outlined" 
                         value={item.number}
                         onChange={event => setItem({...item, number: event.target.value})}

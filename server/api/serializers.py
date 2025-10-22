@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api import models
+from django.db import transaction
 
 
 class SimpleCompanySerializer(serializers.ModelSerializer):
@@ -108,70 +109,74 @@ class InvoiceInListSerializer(serializers.ModelSerializer):
 class InvoiceInSerializer(serializers.ModelSerializer):
 
     invoice_in_list = InvoiceInListSerializer(many=True)
-    company = SimpleCompanySerializer()
-    partner = SimplePartnerSerializer()
-    contract = SimpleContractSerializer()
+    company = SimpleCompanySerializer(allow_null=True)
+    partner = SimplePartnerSerializer(allow_null=True)
+    contract = SimpleContractSerializer(allow_null=True)
 
     class Meta:
         model = models.InvoiceIn
         fields = ['id', 'is_active', 'date', 'number', 'created_at', 'company',
                   'partner', 'contract', 'total', 'invoice_in_list',]
 
-    def validate_company(self, value):
-        try:
-            id = self.initial_data.get('company')['id']
-            value = models.Company.objects.get(id=id)
-        except models.Company.DoesNotExist:
-            raise serializers.ValidationError("Company is not found")
-        return value
+    @transaction.atomic
+    def create(self, validated_data, ):
+        convert_to_object(self, validated_data)
+        invoices_in_list_data = validated_data.pop("invoice_in_list")
+        InvoiceIn = models.InvoiceIn.objects.create(**validated_data)
+        for row in invoices_in_list_data:
+            models.InvoiceInList.objects.create(invoice_in=InvoiceIn, **row)
+        return InvoiceIn
 
-    def validate_partner(self, value):
-        try:
-            id = self.initial_data.get('partner')['id']
-            value = models.Partner.objects.get(id=id)
-        except models.Partner.DoesNotExist:
-            raise serializers.ValidationError("Partner is not found")
-        return value
-
-    def validate_contract(self, value):
-        try:
-            id = self.initial_data.get('contract')['id']
-            value = models.Contract.objects.get(id=id)
-        except models.Contract.DoesNotExist:
-            raise serializers.ValidationError("Contract is not found")
-        return value
-
-    def validate_invoice_in_list(self, value):
-        value = []
-        rowList = {}
-        for row in self.initial_data['invoice_in_list']:
-            try:
-                goods = models.Goods.objects.get(id=row.get('goods')['id'])
-                rowList = row.copy()
-                rowList.update({'goods': goods})
-                value.append(rowList)
-            except models.Goods.DoesNotExist:
-                raise serializers.ValidationError("Goods is not found")
-        return value
-
-    # def create(self, validated_data):
-    #     return 1
-
+    @transaction.atomic
     def update(self, instance, validated_data):
+
+        convert_to_object(self, validated_data)
 
         invoices_in_list_data = validated_data.pop("invoice_in_list")
 
         for key, value in validated_data.items():
             setattr(instance, key, value)
 
+        models.InvoiceInList.objects.filter(invoice_in=instance).delete()
         for row in invoices_in_list_data:
-            inv_li = models.InvoiceInList.objects.filter(
-                            invoice_in=instance, number=row['number'])
-            if inv_li.count() > 0:
-                models.InvoiceInList.objects.filter(
-                    invoice_in=instance, number=row['number']).update(**row)
-            else:
-                models.InvoiceInList.objects.create(invoice_in=instance, **row)
+            models.InvoiceInList.objects.create(invoice_in=instance, **row)
 
         instance.save()
         return instance
+
+
+# Рекурсивно меняем id на объекты 
+def convert_to_object(serializer, validated_data, class_instance=None, list_name=None):
+    # Метополя для итерации
+    if class_instance is None:
+        meta_filds = serializer.instance._meta.get_fields()
+    else:
+        meta_filds = class_instance._meta.get_fields()
+
+    for field in meta_filds:
+        if field.name in validated_data:
+            if field.get_internal_type() == 'ForeignKey':
+                # Получаем класс из мета данных
+                field_name = field.name.replace('_', ' ').title().replace(' ', '')
+                class_instance = getattr(models, field_name)
+                # Список класов 
+                if isinstance(validated_data[field.name], list):
+                    for element in validated_data[field.name]:
+                        convert_to_object(serializer, element, class_instance, field.name)
+                else:
+                    if validated_data[field.name] is not None:
+                        try:
+                            # ID из initial_data, в validated_data нет
+                            if list_name is None:
+                                id = serializer.initial_data.get(field.name)['id']
+                            else:
+                                # индекс списка = номер строки
+                                num_line = validated_data.get('number')-1
+                                # необходимая строка
+                                line = serializer.initial_data.get(list_name)[num_line]
+                                # id объекта
+                                id = line[field.name]['id']
+                            validated_data[field.name] = class_instance.objects.get(id=id)
+                        except class_instance.DoesNotExist:
+                            validated_data[field.name] = None
+    return validated_data
