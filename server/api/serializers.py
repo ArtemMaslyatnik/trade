@@ -46,7 +46,7 @@ class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Contract
         fields = ['id', 'name', 'is_group', 'is_parent',
-                  'is_active', 'date', 'company', 'partner']
+                  'is_delete', 'date', 'company', 'partner']
         depth = 0
 
     # def create(self, validated_data):
@@ -67,7 +67,7 @@ class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Partner
         fields = ['id', 'name', 'is_group', 'is_parent',
-                  'is_active', 'contracts']
+                  'is_delete', 'contracts']
         depth = 0
 
 
@@ -115,12 +115,12 @@ class InvoiceInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.InvoiceIn
-        fields = ['id', 'is_active', 'date', 'number', 'created_at', 'company',
+        fields = ['id', 'is_active', 'is_delete', 'date', 'number', 'created_at', 'company',
                   'partner', 'contract', 'total', 'invoice_in_list',]
 
     @transaction.atomic
     def create(self, validated_data, ):
-        convert_to_object(self, validated_data)
+        convert_to_object(self, validated_data, models.InvoiceIn)
         invoices_in_list_data = validated_data.pop("invoice_in_list")
         InvoiceIn = models.InvoiceIn.objects.create(**validated_data)
         for row in invoices_in_list_data:

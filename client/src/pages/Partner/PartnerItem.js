@@ -9,7 +9,7 @@ const PartnerItem = () => {
     // replace
     const ROUT = PARTNER_ROUTE
     
-    const [item, setItem] = useState({'name': '','is_active':'','is_group':''})
+    const [item, setItem] = useState({'name': '','is_delete':'','is_group':''})
     const [loading, setLoading] = useState(true); // Состояние для отслеживания загрузки
 
     const {id} = useParams()
@@ -47,8 +47,8 @@ const PartnerItem = () => {
                     <Form.Check 
                         type="checkbox" 
                         label="Активный" 
-                        checked={item.is_active}
-                        onChange={event => setItem({...item, is_active: event.target.checked})}
+                        checked={item.is_delete}
+                        onChange={event => setItem({...item, is_delete: event.target.checked})}
 
                     />
                 </Form.Group>

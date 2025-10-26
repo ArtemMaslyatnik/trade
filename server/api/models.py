@@ -5,7 +5,7 @@ from django.db import models
 #
 class Catalog(models.Model):
     name = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True, null=False, blank=False)
+    is_delete = models.BooleanField(default=False, null=False, blank=False)
     is_group = models.BooleanField(default=False, null=False, blank=False)
     is_parent = models.BooleanField(default=False, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +18,7 @@ class Catalog(models.Model):
 class Document(models.Model):
     number = models.BigIntegerField()
     is_active = models.BooleanField(default=True, null=False, blank=False)
+    is_delete = models.BooleanField(default=False, null=False, blank=False)
     date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
