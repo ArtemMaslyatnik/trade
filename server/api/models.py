@@ -1,4 +1,8 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+
+from api.enum import TypeMovement
 
 
 # Abstract class
@@ -34,6 +38,20 @@ class List(models.Model):
         abstract = True
 
 
+class MovementTable(models.Model):
+    is_active = models.BooleanField(default=True, null=False, blank=False)
+    type_movement = models.CharField(max_length=3,
+                                     choices=TypeMovement.choices)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    recorder = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'id')
+    number = models.IntegerField()
+    date = models.DateTimeField()
+
+    class Meta:
+        abstract = True
+
+
 # Catalogs
 class Company(Catalog):
     id = models.BigAutoField
@@ -52,6 +70,10 @@ class Contract(Catalog):
 
 
 class Goods(Catalog):
+    id = models.BigAutoField
+
+
+class Warehouse(Catalog):
     id = models.BigAutoField
 
 
@@ -87,4 +109,13 @@ class InvoiceInList(List):
     goods = models.ForeignKey(Goods, null=True, on_delete=models.CASCADE)
     price = models.BigIntegerField()
     quantity = models.BigIntegerField()
+    sum = models.BigIntegerField()
+
+
+class MovementGoods(MovementTable):
+    id = models.PositiveIntegerField
+    goods = models.ForeignKey(Goods, null=True, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(Warehouse, null=True, on_delete=models.CASCADE)
+    quantity = models.BigIntegerField()
+    batch = models.ForeignKey(InvoiceIn, null=True, on_delete=models.CASCADE)
     sum = models.BigIntegerField()

@@ -73,7 +73,7 @@ const InvoceInList = observer(() => {
     ];
     return (
         <Container className="mt-3">
-            <Box sx={{ height: 400, width: '100%' }}>
+            <Box sx={{ height: '100%', width: '100%' }}>
                 <Button variant="contained" onClick={() => navigate(INVOCE_IN_ADD_ROUTE)}>Добавить</Button>   
                 <DataGrid
                     showToolbar
@@ -82,11 +82,11 @@ const InvoceInList = observer(() => {
                     initialState={{
                     pagination: {
                          paginationModel: {
-                         pageSize: 5,
+                         pageSize: 20,
                          },
                      },
                      }}
-                     pageSizeOptions={[5]}
+                     pageSizeOptions={[20]}
                     checkboxSelection
                     disableRowSelectionOnClick
                 />

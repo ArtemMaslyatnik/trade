@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from api import models
 from django.db import transaction
+from django.contrib.contenttypes.models import ContentType
+
+from api.enum import TypeMovement
 
 
 class SimpleCompanySerializer(serializers.ModelSerializer):
@@ -120,32 +123,54 @@ class InvoiceInSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data, ):
+        # Конвертация клиенских данных в объекты базы
         convert_to_object(self, validated_data, models.InvoiceIn)
+
         invoices_in_list_data = validated_data.pop("invoice_in_list")
         InvoiceIn = models.InvoiceIn.objects.create(**validated_data)
+        # Формируем структуру данных Для движения
+        list_goods = []
+
         for row in invoices_in_list_data:
-            models.InvoiceInList.objects.create(invoice_in=InvoiceIn, **row)
+            new_obj = models.InvoiceInList.objects.create(invoice_in=InvoiceIn, **row)
+            list_goods.append(new_obj)
+
+        # Движение по связанным таблицам
+        data_dict = {}
+        data_dict['head'] = InvoiceIn
+        data_dict['list_goods'] = list_goods
+        movement(data_dict)
         return InvoiceIn
 
     @transaction.atomic
     def update(self, instance, validated_data):
 
+        # Конвертация клиенских данных в объекты базы
         convert_to_object(self, validated_data)
 
         invoices_in_list_data = validated_data.pop("invoice_in_list")
 
         for key, value in validated_data.items():
             setattr(instance, key, value)
+        # Формируем структуру данных Для движения
+        list_goods = []
 
         models.InvoiceInList.objects.filter(invoice_in=instance).delete()
         for row in invoices_in_list_data:
-            models.InvoiceInList.objects.create(invoice_in=instance, **row)
+            new_obj = models.InvoiceInList.objects.create(invoice_in=instance, **row)
+            list_goods.append(new_obj)
 
         instance.save()
+
+        # Движение по связанным таблицам
+        data_dict = {}
+        data_dict['head'] = instance
+        data_dict['list_goods'] = list_goods
+        movement(data_dict)
         return instance
 
 
-# Рекурсивно меняем id на объекты 
+# Рекурсивно меняем id на объекты
 def convert_to_object(serializer, validated_data, class_instance=None, list_name=None):
     # Метополя для итерации
     if class_instance is None:
@@ -180,3 +205,30 @@ def convert_to_object(serializer, validated_data, class_instance=None, list_name
                         except class_instance.DoesNotExist:
                             validated_data[field.name] = None
     return validated_data
+
+
+def movement(data_dict):
+
+    head = data_dict['head']
+    recorder_ct = ContentType.objects.get_for_model(head)
+
+    # Удаляем движение
+    models.MovementGoods.objects.filter(content_type=recorder_ct,
+                                        recorder=head.id).delete()
+    if not head.is_active or head.is_delete:
+        return
+
+    for row in data_dict['list_goods']:
+
+        new_obj = models.MovementGoods()
+        new_obj.date = head.date
+        new_obj.type_movement = TypeMovement.Income
+        new_obj.is_active = head.is_active
+        new_obj.number = row.number
+        new_obj.quantity = row.quantity
+        new_obj.sum = row.sum
+        new_obj.batch = head
+        new_obj.goods = row.goods
+        new_obj.content_type = recorder_ct
+        new_obj.recorder = head.id
+        new_obj.save()
