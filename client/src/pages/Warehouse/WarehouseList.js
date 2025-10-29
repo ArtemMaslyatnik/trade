@@ -3,23 +3,23 @@ import {observer} from "mobx-react-lite";
 import {useNavigate} from 'react-router-dom'
 import {fetch}from "../../service/GoodsService";
 import {Context} from "../../index";
-import { GOODS_ADD_ROUTE, GOODS_ROUTE } from '../../utils/consts';
+import { GOODS_ADD_ROUTE, WAREHOUSE_ROUTE } from '../../utils/consts';
 import { Box, Button, Container, Link } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
-const GoodsList = observer(() => {
-    const {goods} = useContext(Context);
+const WarehousList = observer(() => {
+    const {warehose} = useContext(Context);
     const navigate = useNavigate ();
     const [items, setItem] = useState()
 
     useEffect(() => {
         fetch().then(data => {
-                    goods.setGoods(data)
+                    warehose.setWarehoses(data)
                 })
     }, [])
 
     const handleDeleteRow = (rr) => {
-    if (goods.length === 0) {
+    if (warehose.length === 0) {
         console.log(rr)
       return;
     }
@@ -35,7 +35,7 @@ const GoodsList = observer(() => {
     const columns = [
         { field: 'id', headerName: 'Код', width: 100, 
             renderCell: (params) => (
-            <Link href={GOODS_ROUTE + `/${params.row.id}` } >
+            <Link href={WAREHOUSE_ROUTE + `/${params.row.id}` } >
                 {params.value} {/* params.value would be the 'name' in this case */}
             </Link>
         ), },
@@ -51,7 +51,7 @@ const GoodsList = observer(() => {
                 onClick={event => (console.log(event))}
                 >Удалить</Button>
                 <DataGrid
-                    rows={goods.goods}
+                    rows={warehose.warehouses}
                     columns={columns}
                     initialState={{
                     pagination: {
@@ -70,4 +70,4 @@ const GoodsList = observer(() => {
     );
 });
 
-export default GoodsList;
+export default WarehousList;

@@ -1,4 +1,4 @@
-import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE, COMPANY_ADD_ROUTE, PARTNER_ADD_ROUTE, CONTRACT_ADD_ROUTE, INVOCE_IN_ADD_ROUTE} from "./utils/consts";
+import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE, COMPANY_ADD_ROUTE, PARTNER_ADD_ROUTE, CONTRACT_ADD_ROUTE, INVOCE_IN_ADD_ROUTE, WAREHOUSE_ROUTE, WAREHOUSE_ADD_ROUTE} from "./utils/consts";
 import Maine from "./pages/Main";
 import Contract from "./pages/Contract/ContractList";
 import ContractItem from "./pages/Contract/ContractItem";
@@ -18,6 +18,10 @@ import InvoceOutItem from "./components/InvoceOutItem";
 import GoodsList from "./pages/Goods/GoodsList";
 import GoodsCreate from "./pages/Goods/GoodsCreate";
 import GoodsItem from "./pages/Goods/GoodsItem";
+
+import WarehouseList from "./pages/Warehouse/WarehouseList";
+import WarehouseCreate from "./pages/Warehouse/WarehouseCreate";
+import WarehouseItem from "./pages/Warehouse/WarehouseItem";
 
 import CompanyList from "./pages/Company/CompanyList";
 import CompanyItem from "./pages/Company/CompanyItem";
@@ -79,6 +83,18 @@ export const publicRoutes = [
     {
         path: COMPANY_ROUTE+ '/:id',
         Element: <CompanyItem/>
+    },
+    {
+        path: WAREHOUSE_ROUTE,
+        Element: <WarehouseList/>
+    },
+    {
+        path: WAREHOUSE_ADD_ROUTE,
+        Element: <WarehouseCreate/>
+    },
+    {
+        path: WAREHOUSE_ROUTE + '/:id',
+        Element: <WarehouseItem/>
     },
     {
         path: INVOCE_IN_ROUTE,
