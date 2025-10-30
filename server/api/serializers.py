@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from api.enum import TypeMovement
 
 
+# Catalogs simple
 class SimpleCompanySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -34,6 +35,14 @@ class SimpleGoodsSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class SimpleWarehouseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Warehouse
+        fields = ['id', 'name']
+
+
+# Catalogs
 class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -81,6 +90,14 @@ class GoodsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class WarehouseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Warehouse
+        fields = '__all__'
+
+
+# Documents
 class InvoiceOutListSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -90,15 +107,17 @@ class InvoiceOutListSerializer(serializers.ModelSerializer):
 
 class InvoiceOutSerializer(serializers.ModelSerializer):
 
-    invoice_out_list = InvoiceOutListSerializer(many=True, read_only=True)
-    company = SimpleCompanySerializer()
-    partner = SimplePartnerSerializer()
-    contract = SimpleContractSerializer()
+    invoice_out_list = InvoiceOutListSerializer(many=True)
+    company = SimpleCompanySerializer(allow_null=True)
+    partner = SimplePartnerSerializer(allow_null=True)
+    contract = SimpleContractSerializer(allow_null=True)
+    warehouse = SimpleWarehouseSerializer(allow_null=True)
 
     class Meta:
         model = models.InvoiceOut
         fields = ['id', 'is_active', 'date', 'number', 'created_at', 'company',
-                  'partner', 'contract', 'total', 'invoice_out_list']
+                  'warehouse', 'partner', 'contract', 'total',
+                  'invoice_out_list']
 
 
 class InvoiceInListSerializer(serializers.ModelSerializer):
@@ -115,10 +134,12 @@ class InvoiceInSerializer(serializers.ModelSerializer):
     company = SimpleCompanySerializer(allow_null=True)
     partner = SimplePartnerSerializer(allow_null=True)
     contract = SimpleContractSerializer(allow_null=True)
+    warehouse = SimpleWarehouseSerializer(allow_null=True)
 
     class Meta:
         model = models.InvoiceIn
-        fields = ['id', 'is_active', 'is_delete', 'date', 'number', 'created_at', 'company',
+        fields = ['id', 'is_active', 'is_delete', 'date', 'number',
+                  'created_at', 'company', 'warehouse',
                   'partner', 'contract', 'total', 'invoice_in_list',]
 
     @transaction.atomic

@@ -15,6 +15,7 @@ import { create } from '../../service/InvoceInService';
 import { fetch as fetchCompany } from '../../service/CompanyService';
 import { fetch as fetchPartner } from '../../service/PartnerService';
 import { fetch as fetchContract } from '../../service/ContractService';
+import { fetch as fetchWarehouse } from '../../service/WarehouseService';
 import dayjs from 'dayjs';
 import { gridStringOrNumberComparator } from '@mui/x-data-grid';
 import { renderEditGoods, renderGoods } from '../../components/UI/AutocompleteGoods';
@@ -30,15 +31,17 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 const InvoceInCreate = () => {
 
     const [item, setItem] = useState({'number': 0,'is_active':false, 'date':dayjs(), 'total':0,
-            'invoice_in_list':[],'company':null, 'partner':null,  'contract':null})
+            'invoice_in_list':[],'warehouse':null, 'company':null, 'partner':null,  'contract':null})
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
     const [contractItems, setContract] = useState([]);
+    const [warehouseItems, setWarehouse] = useState([]);
     const navigate = useNavigate();
      
     useEffect(() => {
         fetchCompany().then(data => setCompany(data))
         fetchPartner().then(data => setPartner(data))
+        fetchWarehouse().then(data => setWarehouse(data))
         fetchContract(null, null, null).then(data => setContract(data))
     }, [])
 
@@ -184,6 +187,8 @@ const InvoceInCreate = () => {
                         onClick={() => navigate(-1)} >
                     Отменить
                 </Button >
+            </Box>
+            <Box>
                 <FormGroup className="mb-3">
                     <Checkbox
                         type="checkbox" 
@@ -216,6 +221,15 @@ const InvoceInCreate = () => {
                         onChange={(event, newValue)  => setItem({...item, company: newValue})}
                         renderInput={(params) => <TextField {...params} label="Копания"  />}
                         
+                    />
+                </FormGroup>
+                <FormGroup className="mb-3">
+                    <Autocomplete
+                        getOptionLabel={(option) => option.name || ""}
+                        options={warehouseItems}
+                        value={item.warehouse}
+                        onChange={(event, newValue)  => setItem({...item, warehouse: newValue})}
+                        renderInput={(params) => <TextField {...params} label="Склад" />}
                     />
                 </FormGroup>
                 <FormGroup className="mb-3">

@@ -1,6 +1,6 @@
 import {makeAutoObservable} from "mobx";
 
-export default class GoodsStore {
+export default class WarehouseStore {
 
     constructor() {
         this._warehouses= [
@@ -8,11 +8,11 @@ export default class GoodsStore {
         makeAutoObservable(this)
     }
 
-    setWarehoses(warehouses) {
+    setWarehouses(warehouses) {
         this._warehouses = warehouses
     }
 
-    get goods() {
+    get warehouses() {
         return this._warehouses
     }
 

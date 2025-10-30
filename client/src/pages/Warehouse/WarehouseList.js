@@ -1,37 +1,22 @@
 import React, {useEffect, useContext, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {useNavigate} from 'react-router-dom'
-import {fetch}from "../../service/GoodsService";
+import {fetch}from "../../service/WarehouseService";
 import {Context} from "../../index";
-import { GOODS_ADD_ROUTE, WAREHOUSE_ROUTE } from '../../utils/consts';
+import { WAREHOUSE_ADD_ROUTE, WAREHOUSE_ROUTE } from '../../utils/consts';
 import { Box, Button, Container, Link } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
-const WarehousList = observer(() => {
-    const {warehose} = useContext(Context);
+const WarehouseList = observer(() => {
+    const {warehouse} = useContext(Context);
     const navigate = useNavigate ();
     const [items, setItem] = useState()
 
     useEffect(() => {
         fetch().then(data => {
-                    warehose.setWarehoses(data)
+                    warehouse.setWarehouses(data)
                 })
-    }, [])
-
-    const handleDeleteRow = (rr) => {
-    if (warehose.length === 0) {
-        console.log(rr)
-      return;
-    }
-    console.log(rr)
-    // setGoods((prevRows) => {
-    //   const rowToDeleteIndex = randomInt(0, prevRows.length - 1);
-    //   return [
-    //     ...rows.slice(0, rowToDeleteIndex),
-    //     ...rows.slice(rowToDeleteIndex + 1),
-    //   ];
-    // });
-  };
+    }, []);
     const columns = [
         { field: 'id', headerName: 'Код', width: 100, 
             renderCell: (params) => (
@@ -46,12 +31,12 @@ const WarehousList = observer(() => {
     return (
         <Container className="mt-3">
             <Box sx={{ height: '100%', width: '100%' }}>
-                <Button variant="contained" onClick={() => navigate(GOODS_ADD_ROUTE)}>Добавить</Button>   
+                <Button variant="contained" onClick={() => navigate(WAREHOUSE_ADD_ROUTE)}>Добавить</Button>   
                 <Button size="small" 
                 onClick={event => (console.log(event))}
                 >Удалить</Button>
                 <DataGrid
-                    rows={warehose.warehouses}
+                    rows={warehouse.warehouses}
                     columns={columns}
                     initialState={{
                     pagination: {
@@ -70,4 +55,4 @@ const WarehousList = observer(() => {
     );
 });
 
-export default WarehousList;
+export default WarehouseList;

@@ -83,6 +83,7 @@ class InvoiceOut(Document):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    wrehouse = models.ForeignKey(Warehouse, null=True, on_delete=models.CASCADE)
     total = models.BigIntegerField()
 
 
@@ -100,6 +101,7 @@ class InvoiceIn(Document):
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner, null=True, on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, null=True, on_delete=models.CASCADE)
+    wrehouse = models.ForeignKey(Warehouse, null=True, on_delete=models.CASCADE)
     total = models.BigIntegerField()
 
 
@@ -114,8 +116,8 @@ class InvoiceInList(List):
 
 class MovementGoods(MovementTable):
     id = models.PositiveIntegerField
-    goods = models.ForeignKey(Goods, null=True, on_delete=models.CASCADE)
-    warehouse = models.ForeignKey(Warehouse, null=True, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, null=False, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(Warehouse, null=False, on_delete=models.CASCADE)
     quantity = models.BigIntegerField()
-    batch = models.ForeignKey(InvoiceIn, null=True, on_delete=models.CASCADE)
+    batch = models.ForeignKey(InvoiceIn, null=False, on_delete=models.CASCADE)
     sum = models.BigIntegerField()

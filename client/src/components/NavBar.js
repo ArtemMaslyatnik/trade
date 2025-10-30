@@ -24,7 +24,7 @@ const NavBar = observer(() => {
             <Nav.Link href={COMPANY_ROUTE}>Компании</Nav.Link> 
           </Nav> 
           <Nav className="me-auto">
-            <Nav.Link href={WAREHOUSE_ROUTE}>Складs</Nav.Link> 
+            <Nav.Link href={WAREHOUSE_ROUTE}>Склады</Nav.Link> 
           </Nav> 
           <Nav className="me-auto">
             <Nav.Link href={INVOCE_IN_ROUTE}>Приход</Nav.Link> 

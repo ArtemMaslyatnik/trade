@@ -15,10 +15,13 @@ router.register(r'contract', views.ContractViewSet,
                 basename='contract')
 router.register(r'goods',  views.GoodsViewSet,
                 basename='goods')
+router.register(r'warehouse', views.WarehouseViewSet,
+                basename='warehouse')
 router.register(r'invoice_out', views.InvoiceOutViewSet,
                 basename='invoice_out')
 router.register(r'invoice_in', views.InvoiceInViewSet,
                 basename='invoice_in')
+
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

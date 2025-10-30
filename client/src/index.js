@@ -7,6 +7,7 @@ import CompanyStore from "./store/CompanyStore"
 import PartnerStore from "./store/PartnerStore"
 import InvoceInStore from "./store/InvoceInStore"
 import InvoceOutStore from "./store/InvoceOutStore"
+import WarehouseStore from "./store/WarehouseStore"
 
 export const Context = createContext(null)
 
@@ -20,6 +21,7 @@ root.render(
       partner: new PartnerStore(),
       invoceIn: new InvoceInStore(),
       invoceOut: new InvoceOutStore(),
+      warehouse: new WarehouseStore(),
 
     }}>
     <App />

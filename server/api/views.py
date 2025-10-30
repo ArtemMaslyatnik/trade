@@ -32,6 +32,12 @@ class GoodsViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.GoodsSerializer
 
 
+class WarehouseViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Warehouse.objects.all()
+    serializer_class = serializers.WarehouseSerializer
+
+
 # Documents
 class InvoiceOutViewSet(viewsets.ModelViewSet):
 
