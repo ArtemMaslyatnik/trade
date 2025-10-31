@@ -11,8 +11,8 @@ import PartnerCreate from "./pages/Partner/PartnerCreate";
 import InvoceInList from "./pages/InvoceIn/InvoceInList";
 import InvoceInItem from "./pages/InvoceIn/InvoceInItem";
 
-import InvoceOut from "./pages/InvoceOut";
-import InvoceOutItem from "./components/InvoceOutItem";
+import InvoceOutList from "./pages/InvoceOut/InvoceOutList";
+import InvoceOutItem from "./pages/InvoceOut/InvoceOutItem";
 
 import GoodsList from "./pages/Goods/GoodsList";
 import GoodsItem from "./pages/Goods/GoodsItem";
@@ -97,7 +97,7 @@ export const publicRoutes = [
         path: INVOCE_IN_ROUTE,
         Element: <InvoceInList/>
     },
-        {
+    {
         path: INVOCE_IN_ADD_ROUTE,
         Element: <InvoceInItem/>
     },
@@ -107,7 +107,7 @@ export const publicRoutes = [
     },
     {
         path: INVOCE_OUT_ROUTE,
-        Element: <InvoceOut/>
+        Element: <InvoceOutList/>
     },
     {
         path: INVOCE_OUT_ROUTE+ '/:id',
