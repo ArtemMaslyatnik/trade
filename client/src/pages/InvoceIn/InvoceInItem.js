@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {observer} from "mobx-react-lite";
 import {useNavigate, useParams } from "react-router-dom"
-import { Box, Button, Checkbox, Container, FormGroup, MenuItem, Select, Tooltip} from '@mui/material';
+import { Box, Button, Checkbox, Container, FormGroup, Tooltip} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import TextField from '@mui/material/TextField';
@@ -11,11 +11,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import 'dayjs/locale/ru';
 // replace
-import { fetchOne, update } from '../../service/InvoceInService';
+import { fetchOne, update, create } from '../../service/InvoceInService';
 import { fetch as fetchCompany } from '../../service/CompanyService';
 import { fetch as fetchPartner } from '../../service/PartnerService';
 import { fetch as fetchContract } from '../../service/ContractService';
+import { fetch as fetchWarehouse } from '../../service/WarehouseService';
 import dayjs from 'dayjs';
+
 import { gridStringOrNumberComparator } from '@mui/x-data-grid';
 import { renderEditGoods, renderGoods } from '../../components/UI/AutocompleteGoods';
 import { Toolbar, ToolbarButton } from '@mui/x-data-grid';
@@ -30,17 +32,22 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 const InvoceInItem = () => {
 
     const [item, setItem] = useState({'number': 0,'is_active':false, 'date':dayjs(), 'total':0,
-            'invoice_in_list':[],'company':'', 'partner':'',  'contract':null})
+            'invoice_in_list':[],'company':'', 'warehouse':'', 'partner':'',  'contract':null})
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
     const [contractItems, setContract] = useState([]);
+    const [warehouseItems, setWarehouse] = useState([]);
     const {id} = useParams()
     const navigate = useNavigate();
      
     useEffect(() => {
-        fetchOne(id).then(data => setItem(data))
+        console.log(id)
+        if (typeof id !== 'undefined' && id !== null){
+            fetchOne(id).then(data => setItem(data))
+        }
         fetchCompany().then(data => setCompany(data))
         fetchPartner().then(data => setPartner(data))
+        fetchWarehouse().then(data => setWarehouse(data))
         fetchContract(null, null, null).then(data => setContract(data))
      }, [])
 
@@ -52,11 +59,13 @@ const InvoceInItem = () => {
         // setItem({...item, contract: null});        
     }, [item.company, item.partner])
 
-    const updateItem = () => {
-                update(id, item).then(data => {
-                    setItem('')
-                })
-                navigate(-1)
+    const save = () => {
+        if (typeof id !== 'undefined' && id !== null){
+            update(id, item).then(data => {setItem('')})            
+        } else {
+            create(item).then(data => {setItem('')})
+        }
+        navigate(-1)
     }
  
    const handleProcessRowUpdate =(newRow, oldRow) => {
@@ -170,8 +179,6 @@ const InvoceInItem = () => {
     },
    ];
 
-
-
     //console.log(contractItems);
    //console.log(item);
   
@@ -180,7 +187,7 @@ const InvoceInItem = () => {
             <h4>{item.number} (приход)</h4>
             <Box>
                 <Button variant="contained"
-                        onClick={updateItem} >
+                        onClick={save} >
                     Сохранить
                 </Button >
                 <Button variant="outlined"
@@ -229,6 +236,15 @@ const InvoceInItem = () => {
                         onChange={(event, newValue)  => setItem({...item, company: newValue})}
                         renderInput={(params) => <TextField {...params} label="Копания"  />}
                         
+                    />
+                </FormGroup>
+                <FormGroup className="mb-3">
+                    <Autocomplete
+                        getOptionLabel={(option) => option.name || ""}
+                        options={warehouseItems}
+                        value={item.warehouse}
+                        onChange={(event, newValue)  => setItem({...item, warehouse: newValue})}
+                        renderInput={(params) => <TextField {...params} label="Склад" />}
                     />
                 </FormGroup>
                 <FormGroup className="mb-3">

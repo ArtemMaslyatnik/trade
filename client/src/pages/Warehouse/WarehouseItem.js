@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 // replace
 import { WAREHOUSE_ROUTE } from '../../utils/consts';
-import { fetchOne, update } from '../../service/WarehouseService';
+import { fetchOne, update, create} from '../../service/WarehouseService';
 import { Box, Button, Checkbox, Container, FormControlLabel, FormGroup, TextField } from '@mui/material';
 
 const WarehoseItem = () => {
@@ -13,21 +13,25 @@ const WarehoseItem = () => {
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
-        fetchOne(id).then(data => setItem(data))
-    }, [])
-    const updateItem = () => {
-            update(id, item).then(data => {
-                setItem('')
-            })
-            navigate(ROUTE)
+        if (typeof id !== 'undefined' && id !== null){
+            fetchOne(id).then(data => setItem(data))
         }
+    }, [])
+    const save = () => {
+        if (typeof id !== 'undefined' && id !== null){
+            update(id, item).then(data => {setItem('')})            
+        } else {
+            create(item).then(data => {setItem('')})
+        }
+        navigate(-1)
+    }
     // console.log(item)
     return (
          <Container className="mt-3">
-            <h4>{item.name} (товар)</h4>
+            <h4>{item.name} (склад)</h4>
             <Box className="mb-3">
                 <Button variant="contained"
-                        onClick={updateItem} >
+                        onClick={save} >
                     Сохранить
                 </Button >
                 <Button size="small"

@@ -3,24 +3,29 @@ import {Button, Container, Form} from "react-bootstrap";
 import { useNavigate, useParams } from 'react-router-dom';
 // replace
 import { GOODS_ROUTE } from '../../utils/consts';
-import { fetchOne, update } from '../../service/GoodsService';
+import { create, fetchOne, update } from '../../service/GoodsService';
 
 const GoodsItem = () => {
     // replace
     const ROUT = GOODS_ROUTE
     
-    const [item, setItem] = useState({'name': '','is_active':'','is_group':''})
+    const [item, setItem] = useState({'name': '','is_delete':false,'is_group':false})
     const {id} = useParams()
     const navigate = useNavigate();
     useEffect(() => {
-        fetchOne(id).then(data => setItem(data))
-    }, [])
-    const updateItem = () => {
-            update(id, item).then(data => {
-                setItem('')
-            })
-            navigate(ROUT)
+        if (typeof id !== 'undefined' && id !== null){
+            fetchOne(id).then(data => setItem(data))
         }
+    }, [])
+    
+    const save = () => {
+        if (typeof id !== 'undefined' && id !== null){
+            update(id, item).then(data => {setItem('')})            
+        } else {
+            create(item).then(data => {setItem('')})
+        }
+        navigate(-1)
+    }
     return (
          <Container className="mt-3">
             <h4>{item.name} (товар)</h4>
@@ -35,9 +40,9 @@ const GoodsItem = () => {
                 <Form.Group className="mb-3">
                     <Form.Check 
                         type="checkbox" 
-                        label="Активный" 
-                        checked={item.is_active}
-                        onChange={event => setItem({...item, is_active: event.target.checked})}
+                        label="Удален" 
+                        checked={item.is_delete}
+                        onChange={event => setItem({...item, is_delete: event.target.checked})}
 
                     />
                 </Form.Group>
@@ -51,7 +56,7 @@ const GoodsItem = () => {
                     />
                 </Form.Group>
                 <Button variant="outline-success"
-                        onClick={updateItem} >
+                        onClick={save} >
                     Сохранить
                 </Button >
                 <Button variant="outline-danger"

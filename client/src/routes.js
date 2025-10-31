@@ -10,17 +10,14 @@ import PartnerCreate from "./pages/Partner/PartnerCreate";
 
 import InvoceInList from "./pages/InvoceIn/InvoceInList";
 import InvoceInItem from "./pages/InvoceIn/InvoceInItem";
-import InvoceInCreate from "./pages/InvoceIn/InvoceInCreate";
 
 import InvoceOut from "./pages/InvoceOut";
 import InvoceOutItem from "./components/InvoceOutItem";
 
 import GoodsList from "./pages/Goods/GoodsList";
-import GoodsCreate from "./pages/Goods/GoodsCreate";
 import GoodsItem from "./pages/Goods/GoodsItem";
 
 import WarehouseList from "./pages/Warehouse/WarehouseList";
-import WarehouseCreate from "./pages/Warehouse/WarehouseCreate";
 import WarehouseItem from "./pages/Warehouse/WarehouseItem";
 
 import CompanyList from "./pages/Company/CompanyList";
@@ -41,7 +38,7 @@ export const publicRoutes = [
     },
     {
         path: GOODS_ADD_ROUTE,
-        Element: <GoodsCreate/>
+        Element: <GoodsItem/>
     },
     {
         path: GOODS_ROUTE + '/:id',
@@ -90,7 +87,7 @@ export const publicRoutes = [
     },
     {
         path: WAREHOUSE_ADD_ROUTE,
-        Element: <WarehouseCreate/>
+        Element: <WarehouseItem/>
     },
     {
         path: WAREHOUSE_ROUTE + '/:id',
@@ -102,7 +99,7 @@ export const publicRoutes = [
     },
         {
         path: INVOCE_IN_ADD_ROUTE,
-        Element: <InvoceInCreate/>
+        Element: <InvoceInItem/>
     },
     {
         path: INVOCE_IN_ROUTE+ '/:id',

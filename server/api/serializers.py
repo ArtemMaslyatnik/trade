@@ -246,6 +246,7 @@ def movement(data_dict):
         new_obj.type_movement = TypeMovement.Income
         new_obj.is_active = head.is_active
         new_obj.number = row.number
+        new_obj.warehouse = head.warehouse
         new_obj.quantity = row.quantity
         new_obj.sum = row.sum
         new_obj.batch = head

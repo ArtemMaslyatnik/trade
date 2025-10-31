@@ -1,7 +1,6 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {useNavigate} from 'react-router-dom'
-import {Context} from "../../index";
 import { fetch} from '../../service/InvoceInService';
 import { INVOCE_IN_ADD_ROUTE, INVOCE_IN_ROUTE } from '../../utils/consts';
 import { Box, Link, Container, Button} from '@mui/material';
@@ -11,13 +10,13 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 
 
 const InvoceInList = observer(() => {
-    const {invoceIn} = useContext(Context)
+
+    const [loading, setLoading] = useState(true)
+    const [items, setItem] = useState()
     //const [companyItems, setCompany] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
-        fetch().then(data => {
-                    invoceIn.setInvoceIns(data)
-                })
+        fetch().then(data => setItem(data)).finally(() =>setLoading(false))
     }, [])
 
     // const handleDeleteClick = (id) => () => {
@@ -73,11 +72,18 @@ const InvoceInList = observer(() => {
     ];
     return (
         <Container className="mt-3">
-            <Box sx={{ height: '100%', width: '100%' }}>
+            <Box sx={{ height: 600, width: '100%' }}>
                 <Button variant="contained" onClick={() => navigate(INVOCE_IN_ADD_ROUTE)}>Добавить</Button>   
                 <DataGrid
                     showToolbar
-                    rows={invoceIn.invoceIns}
+                    rows={items}
+                    loading={loading} 
+                    slotProps={{
+                    loadingOverlay: {
+                        variant: 'linear-progress', // or 'circular-progress', 'skeleton'
+                        noRowsVariant: 'skeleton', // displayed when loading and no rows are present
+                        },
+                    }}
                     columns={columns}
                     initialState={{
                     pagination: {
