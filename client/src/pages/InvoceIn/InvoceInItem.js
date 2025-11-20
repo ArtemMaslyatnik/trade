@@ -32,7 +32,7 @@ import { GridDeleteForeverIcon } from '@mui/x-data-grid';
 const InvoceInItem = () => {
 
     const [item, setItem] = useState({'number': 0,'is_active':false, 'date':dayjs(), 'total':0,
-            'invoice_in_list':[],'company':'', 'warehouse':'', 'partner':'',  'contract':null})
+            'invoice_in_list':[],'company':null, 'warehouse':null, 'partner':null,  'contract':null})
     const [companyItems, setCompany] = useState([]);
     const [partnerItems, setPartner] = useState([]);
     const [contractItems, setContract] = useState([]);

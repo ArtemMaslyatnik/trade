@@ -51,6 +51,7 @@ const GoodsList = observer(() => {
                 onClick={event => (console.log(event))}
                 >Удалить</Button>
                 <DataGrid
+                    label='Товары'
                     rows={goods.goods}
                     columns={columns}
                     initialState={{

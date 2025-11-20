@@ -64,6 +64,7 @@ const InvoceOutList = observer(() => {
             <Box sx={{ height: 600, width: '100%' }}>
                 <Button variant="contained" onClick={() => navigate(INVOCE_OUT_ADD_ROUTE)}>Добавить</Button>   
                 <DataGrid
+                    label='Расход'
                     showToolbar
                     rows={items}
                     loading={loading} 
