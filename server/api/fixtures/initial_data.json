@@ -1,0 +1,16 @@
+[
+  {
+    "model": "api.TypeMovementAccumulation",
+    "pk": 1,
+    "fields": {
+      "movement": "In"
+    }
+  },
+  {
+    "model": "api.TypeMovementAccumulation",
+    "pk": 2,
+    "fields": {
+      "movement": "Out"
+    }
+  }
+]

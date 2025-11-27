@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { GOODS_ROUTE, MAIN_ROUTE } from '../utils/consts';
+import { GOODS_ROUTE, MAIN_ROUTE, REPORT_ROUTE, PARTNER_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, WAREHOUSE_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE } from '../utils/consts';
 import GoodsItem from '../pages/Goods/GoodsItem';
 import { Link } from '@mui/material';
 // import AdbIcon from '@mui/icons-material/Adb';
@@ -98,9 +98,30 @@ function NavAppBar() {
               <Link href={GOODS_ROUTE}>Товары</Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
+            <MenuItem nClick={handleClose}>
+              <Link href={REPORT_ROUTE}>Отчеты</Link>
+            </MenuItem>
+            <MenuItem nClick={handleClose}>
+              <Link href={PARTNER_ROUTE}>Партнеры</Link>
+            </MenuItem>
+            <MenuItem nClick={handleClose}>
+              <Link href={CONTRACT_ROUTE}>Договора</Link>
+            </MenuItem>
+            <MenuItem nClick={handleClose}>
+              <Link href={COMPANY_ROUTE}>Компании</Link>
+            </MenuItem>
+            <MenuItem nClick={handleClose}>
+              <Link href={WAREHOUSE_ROUTE}>Склады</Link>
+            </MenuItem>
+            <MenuItem nClick={handleClose}>
+              <Link href={INVOCE_IN_ROUTE}>Приход</Link>
+            </MenuItem>
+            <MenuItem nClick={handleClose}>
+              <Link href={INVOCE_OUT_ROUTE}>Расход</Link>
+            </MenuItem>
+            {/* <Navbar.Brand href={MAIN_ROUTE}>Главная</Navbar.Brand> */}
           {/* Работаю с этим */}
+          </Menu>
           
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton

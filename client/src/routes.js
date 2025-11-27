@@ -1,5 +1,7 @@
-import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE, COMPANY_ADD_ROUTE, PARTNER_ADD_ROUTE, CONTRACT_ADD_ROUTE, INVOCE_IN_ADD_ROUTE, WAREHOUSE_ROUTE, WAREHOUSE_ADD_ROUTE, INVOCE_OUT_ADD_ROUTE} from "./utils/consts";
+import {GOODS_ROUTE, CONTRACT_ROUTE, COMPANY_ROUTE, PARTNER_ROUTE, MAIN_ROUTE, INVOCE_IN_ROUTE, INVOCE_OUT_ROUTE, GOODS_ADD_ROUTE, COMPANY_ADD_ROUTE, PARTNER_ADD_ROUTE, CONTRACT_ADD_ROUTE, INVOCE_IN_ADD_ROUTE, WAREHOUSE_ROUTE, WAREHOUSE_ADD_ROUTE, INVOCE_OUT_ADD_ROUTE, REPORT_ROUTE} from "./utils/consts";
 import Maine from "./pages/Main";
+import Report from "./pages/Report/Report";
+
 import Contract from "./pages/Contract/ContractList";
 import ContractItem from "./pages/Contract/ContractItem";
 import ContractCreate from "./pages/Contract/ContractCreate";
@@ -30,6 +32,10 @@ export const publicRoutes = [
     {
         path: MAIN_ROUTE,
         Element: <Maine/>
+    },
+        {
+        path: REPORT_ROUTE,
+        Element: <Report/>
     },
 
     {

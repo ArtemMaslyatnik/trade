@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-
-from api.enum import TypeMovement
+from api.models_type.service.typem_movement_accumulation import TypeMovementAccumulation
 
 
 # Abstract class
@@ -40,8 +39,8 @@ class List(models.Model):
 
 class MovementTable(models.Model):
     is_active = models.BooleanField(default=True, null=False, blank=False)
-    type_movement = models.CharField(max_length=3,
-                                     choices=TypeMovement.choices)
+    type_movement = models.ForeignKey(TypeMovementAccumulation,
+                                      on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     recorder = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'id')
@@ -50,6 +49,18 @@ class MovementTable(models.Model):
 
     class Meta:
         abstract = True
+
+
+# Class MetaObject
+class MetaObjects(models.Model):
+    id = models.PositiveSmallIntegerField
+    name = models.CharField(max_length=128)
+    slug = models.CharField(max_length=128)
+    parent_meta_objects = models.ForeignKey('self', on_delete=models.CASCADE,
+                                            related_name='children',
+                                            null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Catalogs

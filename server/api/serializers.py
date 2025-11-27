@@ -4,7 +4,7 @@ from api import models
 from django.db import transaction, connection
 from django.contrib.contenttypes.models import ContentType
 
-from api.enum import TypeMovement
+from api.models_type.service.typem_movement_accumulation import TypeMovementAccumulation
 
 
 # Catalogs simple
@@ -140,7 +140,7 @@ class InvoiceOutSerializer(serializers.ModelSerializer):
         data_dict = {}
         data_dict['head'] = InvoiceOut
         data_dict['list_goods'] = list_goods
-        movement_out(data_dict, TypeMovement.Outcome)
+        movement_out(serializers, data_dict)
         return InvoiceOut
 
     @transaction.atomic
@@ -168,7 +168,7 @@ class InvoiceOutSerializer(serializers.ModelSerializer):
         data_dict = {}
         data_dict['head'] = instance
         data_dict['list_goods'] = list_goods
-        movement_out(serializers, data_dict, TypeMovement.Outcome)
+        movement_out(serializers, data_dict)
         return instance
 
 
@@ -213,7 +213,7 @@ class InvoiceInSerializer(serializers.ModelSerializer):
         data_dict = {}
         data_dict['head'] = InvoiceIn
         data_dict['list_goods'] = list_goods
-        movement_in(data_dict, TypeMovement.Income)
+        movement_in(data_dict)
         return InvoiceIn
 
     @transaction.atomic
@@ -240,7 +240,7 @@ class InvoiceInSerializer(serializers.ModelSerializer):
         data_dict = {}
         data_dict['head'] = instance
         data_dict['list_goods'] = list_goods
-        movement_in(data_dict, TypeMovement.Income)
+        movement_in(data_dict)
         return instance
 
 
@@ -286,15 +286,15 @@ def convert_to_object(serializer, validated_data, class_instance=None,
     return validated_data
 
 
-def movement_in(data_dict, type_movement):
+def movement_in(data_dict):
 
     head = data_dict['head']
-    
+
     if not head.is_active or head.is_delete:
         return
-   
-    recorder_ct = ContentType.objects.get_for_model(head)
 
+    recorder_ct = ContentType.objects.get_for_model(head)
+    type_movement = TypeMovementAccumulation.objects.get(movement='In')
     # Удаляем движение
     models.MovementGoods.objects.filter(content_type=recorder_ct,
                                         recorder=head.id).delete()
@@ -316,14 +316,16 @@ def movement_in(data_dict, type_movement):
         new_obj.save()
 
 
-def movement_out(serializers, data_dict, type_movement):
+def movement_out(serializers, data_dict):
 
     head = data_dict['head']
     if not head.is_active or head.is_delete:
         return
 
     recorder_ct = ContentType.objects.get_for_model(head)
-    data_dict['list_goods']
+    type_movement_out = TypeMovementAccumulation.objects.get(movement='Out')
+    type_movement_in = TypeMovementAccumulation.objects.get(movement='In')
+    # data_dict['list_goods']
 
     # Удаляем движение
     models.MovementGoods.objects.filter(content_type=recorder_ct,
@@ -333,68 +335,17 @@ def movement_out(serializers, data_dict, type_movement):
         # '-- 1 Данные по документу'
         cursor.execute(" CREATE TEMPORARY TABLE tt_doc AS SELECT  inv_list.goods_id AS goods_in_doc, SUM(inv_list.sum) AS sum_in_doc, SUM(inv_list.quantity) AS quantity_in_doc FROM api_invoiceoutlist AS inv_list WHERE invoice_out_id = %s GROUP BY goods_id; ", [head.id])
         # Остатки
-        cursor.executescript('CREATE TEMPORARY TABLE tt_remains AS '
-                             ' SELECT mg.date, ' 
-                             '  SUM(CASE WHEN mg.type_movement == "In" THEN mg.quantity '
-                        '        ELSE - mg.quantity END ) AS quantity, '
-                        '  SUM(CASE WHEN mg.type_movement == "In" THEN mg.sum '
-                        '        ELSE - mg.sum END ) AS sum, '
-                       '    mg.warehouse_id, '
-                       '    mg.goods_id, '
-                       '    mg.batch_id '
-                       'FROM '
-                       '    tt_doc LEFT JOIN api_movementgoods AS mg ON '
-                       '    tt_doc.goods_in_doc = mg.goods_id '
-                       'WHERE '
-                       '    is_active '
-                       'GROUP BY '
-                       '    goods_id, '
-                       '    batch_id, '
-                       '    warehouse_id '
-                       'HAVING '
-                       '    SUM(CASE '
-                       '        WHEN type_movement == "In" THEN '
-                       '            quantity '
-                       '        ELSE '
-                       '            - quantity '
-                       '    END ) > 0 '
-                       ';')
+        cursor.execute('CREATE TEMPORARY TABLE tt_remains AS SELECT mg.date, SUM(CASE WHEN mg.type_movement_id = %s THEN mg.quantity ELSE - mg.quantity END ) AS quantity, SUM(CASE WHEN mg.type_movement_id = %s THEN mg.sum ELSE - mg.sum END ) AS sum,  mg.warehouse_id, mg.goods_id, mg.batch_id FROM tt_doc LEFT JOIN api_movementgoods AS mg ON tt_doc.goods_in_doc = mg.goods_id WHERE is_active GROUP BY mg.date, goods_id, batch_id, warehouse_id HAVING SUM(CASE WHEN type_movement_id = %s THEN quantity ELSE - quantity END ) > 0 ;', (type_movement_in.pk, type_movement_in.pk, type_movement_in.pk))
         # # Итог
-        cursor.execute('SELECT '
-                       '    tt_doc.goods_in_doc, '
-                       '    tt_doc.sum_in_doc, '
-                       '    tt_doc.quantity_in_doc, '
-                       '    tt_remains.quantity, '
-                       '    tt_remains.sum, '
-                       '    tt_remains.batch_id, '
-                       '    tt_remains.date, '
-                       '    1 AS sort, '
-                       '    0 AS total '
-                       'FROM '
-                       '    tt_doc LEFT JOIN tt_remains  ON '
-                       '    tt_doc.goods_in_doc = tt_remains.goods_id '
-                       'WHERE '
-                       '    warehouse_id = 1 '
+        cursor.execute('SELECT tt_doc.goods_in_doc, tt_doc.sum_in_doc, tt_doc.quantity_in_doc, tt_remains.quantity, tt_remains.sum, tt_remains.batch_id, tt_remains.date, 1 AS sort, 0 AS total '
+                       'FROM  tt_doc LEFT JOIN tt_remains  ON tt_doc.goods_in_doc = tt_remains.goods_id '
+                       'WHERE warehouse_id = %s '
                        'UNION ALL '
-                       'SELECT '
-                       '    tt_doc.goods_in_doc, '
-                       '    MAX(tt_doc.sum_in_doc), '
-                       '    MAX(tt_doc.quantity_in_doc), '
-                       '    SUM(tt_remains.quantity), '
-                       '    NULL, '
-                       '    NULL, '
-                       '    NULL, '
-                       '    0,  '
-                       '    1  '
-                       'FROM '
-                       '    tt_doc LEFT JOIN tt_remains  ON '
-                       '    tt_doc.goods_in_doc = tt_remains.goods_id '
-                       'WHERE '
-                       '    warehouse_id = 1 '
-                       'ORDER BY '
-                       '    date, '
-                       '    sort; '
-        )
+                       'SELECT  tt_doc.goods_in_doc, MAX(tt_doc.sum_in_doc), MAX(tt_doc.quantity_in_doc), SUM(tt_remains.quantity), NULL, NULL, NULL, 0, 1  '
+                       'FROM tt_doc LEFT JOIN tt_remains  ON tt_doc.goods_in_doc = tt_remains.goods_id '
+                       'WHERE warehouse_id = %s '
+                       'GROUP BY tt_doc.goods_in_doc '
+                       'ORDER BY sort, date; ', [head.warehouse.pk, head.warehouse.pk])
         results = dictfetchall(cursor)
 
     # Добовляем движение
@@ -424,7 +375,7 @@ def movement_out(serializers, data_dict, type_movement):
 
         new_obj = models.MovementGoods()
         new_obj.date = head.date
-        new_obj.type_movement = type_movement
+        new_obj.type_movement = type_movement_out
         new_obj.is_active = head.is_active
         new_obj.number = line_number
         new_obj.warehouse = head.warehouse
