@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework import serializers
 from api import models
 from django.db import transaction, connection
@@ -167,7 +168,7 @@ class InvoiceOutSerializer(serializers.ModelSerializer):
         data_dict = {}
         data_dict['head'] = instance
         data_dict['list_goods'] = list_goods
-        movement_out(data_dict, TypeMovement.Outcome)
+        movement_out(serializers, data_dict, TypeMovement.Outcome)
         return instance
 
 
@@ -315,7 +316,7 @@ def movement_in(data_dict, type_movement):
         new_obj.save()
 
 
-def movement_out(data_dict, type_movement):
+def movement_out(serializers, data_dict, type_movement):
 
     head = data_dict['head']
     if not head.is_active or head.is_delete:
@@ -330,7 +331,7 @@ def movement_out(data_dict, type_movement):
     # получаем остатки
     with connection.cursor() as cursor:
         # '-- 1 Данные по документу'
-        cursor.execute(" CREATE TEMPORARY TABLE tt_doc AS SELECT  inv_list.goods_id AS goods_in_doc, SUM(inv_list.sum) AS sum_in_doc, SUM(inv_list.quantity) AS quantity_in_doc FROM api_invoiceoutlist AS inv_list GROUP BY goods_id; ")
+        cursor.execute(" CREATE TEMPORARY TABLE tt_doc AS SELECT  inv_list.goods_id AS goods_in_doc, SUM(inv_list.sum) AS sum_in_doc, SUM(inv_list.quantity) AS quantity_in_doc FROM api_invoiceoutlist AS inv_list WHERE invoice_out_id = %s GROUP BY goods_id; ", [head.id])
         # Остатки
         cursor.executescript('CREATE TEMPORARY TABLE tt_remains AS '
                              ' SELECT mg.date, ' 
@@ -402,8 +403,11 @@ def movement_out(data_dict, type_movement):
         # Групировка по партии
         if row['total']:
             if row['quantity'] < row['quantity_in_doc']:
-                # Сообщить если нехватает
+                # убираем активность
                 head.is_active = False
+                head.save()
+                # Сообщить если нехватает
+                raise serializers.ValidationError("Нет на остатках")
             continue
 
         # Ошибку вызвать
@@ -426,8 +430,8 @@ def movement_out(data_dict, type_movement):
         new_obj.warehouse = head.warehouse
         new_obj.quantity = quantity_out
         new_obj.sum = out_amount
-        new_obj.batch = models.InvoiceIn.objects.get(id=row['batch_id'])
-        new_obj.goods = models.Goods.objects.get(id=row['goods_in_doc'])
+        new_obj.batch_id = row['batch_id']
+        new_obj.goods_id = row['goods_in_doc']
         new_obj.content_type = recorder_ct
         new_obj.recorder = head.id
         new_obj.save()

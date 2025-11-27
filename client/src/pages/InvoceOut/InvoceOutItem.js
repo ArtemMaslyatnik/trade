@@ -41,7 +41,7 @@ const InvoceOutItem = () => {
     const navigate = useNavigate();
      
     useEffect(() => {
-        console.log(id)
+        // console.log(id)
         if (typeof id !== 'undefined' && id !== null){
             fetchOne(id).then(data => setItem(data))
         }
@@ -62,11 +62,13 @@ const InvoceOutItem = () => {
     const save = () => {
         if (typeof id !== 'undefined' && id !== null){
             update(id, item).then(data => {
-                if (data.status === 200) {
+                if (data === 'undefined' || data === undefined) {
+                    console.log(1)
+                } else if (data?.status === 200) {
                     setItem('')
                     navigate(-1)
                 }
-                console.log(data.status);   
+                   
             })
 
         } else {
